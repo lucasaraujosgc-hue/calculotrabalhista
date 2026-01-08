@@ -67,6 +67,57 @@
     background: white !important;
     color: black !important;
     margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Estilos Compactos para Impressão */
+  #print-area-container.print-shrink {
+    padding: 10mm !important;
+    font-size: 10px !important;
+  }
+
+  #print-area-container.print-shrink .print-content-wrapper > div {
+    margin-bottom: 2mm !important;
+  }
+
+  #print-area-container.print-shrink table {
+    margin-bottom: 2mm !important;
+    font-size: 9px !important;
+  }
+
+  #print-area-container.print-shrink table th,
+  #print-area-container.print-shrink table td {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+
+  #print-area-container.print-shrink .grid-cols-4 {
+    gap: 2mm !important;
+    padding: 2mm !important;
+  }
+
+  #print-area-container.print-shrink .bg-slate-50 {
+    padding: 2mm !important;
+    margin-bottom: 2mm !important;
+  }
+
+  #print-area-container.print-shrink .border-2.border-slate-900 {
+    padding: 3mm !important;
+  }
+
+  #print-area-container.print-shrink .mt-12 {
+    margin-top: 4mm !important;
+  }
+
+  #print-area-container.print-shrink .grid-cols-2.gap-20 {
+    gap: 10mm !important;
+    padding-top: 4mm !important;
+  }
+
+  #print-area-container.print-shrink .mt-10 {
+    margin-top: 4mm !important;
   }
 
   #print-area-container * {

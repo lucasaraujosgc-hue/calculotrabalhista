@@ -177,6 +177,7 @@ function App() {
   const [showAdjustModal, setShowAdjustModal] = useState(false);
   const [showPrintPreview, setShowPrintPreview] = useState(false);
   const [printSignatures, setPrintSignatures] = useState(true);
+  const [shrinkToFit, setShrinkToFit] = useState(false); // Novo: Opção para reduzir tamanho
   const [signatureText, setSignatureText] = useState('');
   
   // FGTS State
@@ -402,10 +403,14 @@ function App() {
                           <span className="material-icons-round">arrow_back</span> Voltar
                       </button>
                       <div className="h-6 w-px bg-slate-200 hidden md:block"></div>
-                      <div className="flex items-center gap-4 flex-grow">
+                      <div className="flex flex-wrap items-center gap-6 flex-grow">
                           <label className="flex items-center gap-2 cursor-pointer select-none">
                               <input type="checkbox" checked={printSignatures} onChange={e => setPrintSignatures(e.target.checked)} className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-gray-300" />
-                              <span className="text-sm font-semibold text-slate-700">Incluir campos de assinatura</span>
+                              <span className="text-sm font-semibold text-slate-700 whitespace-nowrap">Incluir assinaturas</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer select-none">
+                              <input type="checkbox" checked={shrinkToFit} onChange={e => setShrinkToFit(e.target.checked)} className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-gray-300" />
+                              <span className="text-sm font-semibold text-slate-700 whitespace-nowrap">Modo Compacto (Ajustar p/ 1 página)</span>
                           </label>
                           {printSignatures && (
                               <input 
@@ -414,7 +419,7 @@ function App() {
                                 value={signatureText} 
                                 onChange={e => setSignatureText(e.target.value)} 
                                 placeholder="Texto customizado (max 2 linhas)" 
-                                className="flex-grow text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="flex-grow text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none min-w-[200px]"
                               />
                           )}
                       </div>
@@ -425,7 +430,7 @@ function App() {
               </div>
 
               {/* AREA DE IMPRESSAO */}
-              <div id="print-area-container" className="bg-white w-full max-w-[210mm] min-h-[297mm] p-10 shadow-2xl mx-auto relative text-sm text-slate-900 flex flex-col justify-between print:shadow-none print:p-8 print:m-0 print:w-full print:h-full">
+              <div id="print-area-container" className={`bg-white w-full max-w-[210mm] min-h-[297mm] p-10 shadow-2xl mx-auto relative text-sm text-slate-900 flex flex-col justify-between print:shadow-none print:p-8 print:m-0 print:w-full print:h-full ${shrinkToFit ? 'print-shrink' : ''}`}>
                     <div className="print-content-wrapper">
                         {/* Header Demonstrativo */}
                         <div className="flex justify-between items-end border-b-2 border-slate-800 pb-2 mb-4">
