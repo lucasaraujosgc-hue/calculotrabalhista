@@ -247,6 +247,10 @@ function App() {
     const admissao = parseDate(formData.dataAdmissao);
     const demissao = parseDate(formData.dataDemissao);
     const feriasVencidasQtd = Number(formData.feriasVencidasQtd);
+    
+    // Regra: a cada 2 férias vencidas, paga-se 1 em dobro (multa)
+    const feriasDobroQtd = Math.floor(feriasVencidasQtd / 2);
+
     const isPedidoDemissao = formData.motivo === 'pedido';
 
     let diasAviso = 30;
@@ -297,8 +301,15 @@ function App() {
     
     const avos13 = calcularAvos13(admissao, demissao);
     const valor13 = (salarioTotal / 12) * avos13;
+    
+    // Férias Vencidas Simples (Total de períodos informados)
     const valorFeriasVencidas = feriasVencidasQtd * salarioTotal;
     const tercoFeriasVencidas = valorFeriasVencidas / 3;
+
+    // Férias Vencidas em Dobro (Multa: valor de 1 período para cada 2 vencidos)
+    const valorFeriasDobro = feriasDobroQtd * salarioTotal;
+    const tercoFeriasDobro = valorFeriasDobro / 3;
+
     let inicioPeriodoAquisitivo = new Date(admissao);
     while (new Date(inicioPeriodoAquisitivo.getFullYear() + 1, inicioPeriodoAquisitivo.getMonth(), inicioPeriodoAquisitivo.getDate()) <= demissao) {
         inicioPeriodoAquisitivo.setFullYear(inicioPeriodoAquisitivo.getFullYear() + 1);
@@ -355,7 +366,9 @@ function App() {
     const totalIRRF = irrfSalario + irrf13;
     const totalAjustesProventos = ajustes.filter(a => a.tipo === 'Provento').reduce((acc, c) => acc + c.valor, 0);
     const totalAjustesDescontosIn = ajustes.filter(a => a.tipo === 'Desconto').reduce((acc, c) => acc + c.valor, 0);
-    const totalProventos = saldoSalario + valorAvisoProvento + valor13 + valorFeriasVencidas + tercoFeriasVencidas + valorFeriasProp + tercoFeriasProp + valor13Indenizado + valorFeriasIndenizado + tercoFeriasIndenizado + totalAjustesProventos;
+    
+    // Soma total de proventos
+    const totalProventos = saldoSalario + valorAvisoProvento + valor13 + valorFeriasVencidas + tercoFeriasVencidas + valorFeriasDobro + tercoFeriasDobro + valorFeriasProp + tercoFeriasProp + valor13Indenizado + valorFeriasIndenizado + tercoFeriasIndenizado + totalAjustesProventos;
     const totalDescontosAutomaticos = descontoINSS + totalIRRF + valorAvisoDesconto + totalAjustesDescontosIn;
     const rescisaoLiquida = totalProventos - totalDescontosAutomaticos;
     const totalGeral = rescisaoLiquida + totalContaFGTS;
@@ -364,7 +377,9 @@ function App() {
         saldoSalario, diasTrabalhados,
         valorAviso: valorAvisoProvento, valorAvisoDesconto, 
         diasAviso, valor13, avos13,
-        valorFeriasVencidas, tercoFeriasVencidas, valorFeriasProp, tercoFeriasProp, avosFerias: avosFeriasCalc,
+        valorFeriasVencidas, tercoFeriasVencidas, feriasVencidasQtd,
+        valorFeriasDobro, tercoFeriasDobro, feriasDobroQtd,
+        valorFeriasProp, tercoFeriasProp, avosFerias: avosFeriasCalc,
         valor13Indenizado, valorFeriasIndenizado, tercoFeriasIndenizado,
         fgtsRescisao, fgtsAvisoIndenizado, multa40, totalContaFGTS, saldoFGTSBase: saldoFGTSParaMulta,
         descontoINSS, totalIRRF, rescisaoLiquida, totalGeral, isPedidoDemissao,
@@ -454,6 +469,23 @@ function App() {
                                 {calculo.valorAviso > 0 && <tr className="border-b border-slate-100"><td className="py-2 px-3">Aviso Prévio Indenizado</td><td className="py-2 px-3 text-center text-slate-400">{calculo.diasAviso}d</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valorAviso)}</td><td className="py-2 px-3"></td></tr>}
                                 <tr className="border-b border-slate-100"><td className="py-2 px-3">13º Salário Proporcional</td><td className="py-2 px-3 text-center text-slate-400">{calculo.avos13}/12</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valor13)}</td><td className="py-2 px-3"></td></tr>
                                 {calculo.valor13Indenizado > 0 && <tr className="border-b border-slate-100"><td className="py-2 px-3">13º s/ Aviso Indenizado</td><td className="py-2 px-3 text-center text-slate-400">-</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valor13Indenizado)}</td><td className="py-2 px-3"></td></tr>}
+                                
+                                {/* Férias Vencidas Simples */}
+                                {calculo.valorFeriasVencidas > 0 && (
+                                    <>
+                                        <tr className="border-b border-slate-100"><td className="py-2 px-3">Férias Vencidas</td><td className="py-2 px-3 text-center text-slate-400">{calculo.feriasVencidasQtd} p.</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valorFeriasVencidas)}</td><td className="py-2 px-3"></td></tr>
+                                        <tr className="border-b border-slate-100"><td className="py-2 px-3">1/3 Férias Vencidas</td><td className="py-2 px-3 text-center text-slate-400">1/3</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.tercoFeriasVencidas)}</td><td className="py-2 px-3"></td></tr>
+                                    </>
+                                )}
+
+                                {/* Férias Vencidas em Dobro */}
+                                {calculo.valorFeriasDobro > 0 && (
+                                    <>
+                                        <tr className="border-b border-slate-100 font-bold"><td className="py-2 px-3">Férias em Dobro (Multa)</td><td className="py-2 px-3 text-center text-slate-400">{calculo.feriasDobroQtd} p.</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valorFeriasDobro)}</td><td className="py-2 px-3"></td></tr>
+                                        <tr className="border-b border-slate-100"><td className="py-2 px-3">1/3 Férias em Dobro</td><td className="py-2 px-3 text-center text-slate-400">1/3</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.tercoFeriasDobro)}</td><td className="py-2 px-3"></td></tr>
+                                    </>
+                                )}
+
                                 <tr className="border-b border-slate-100"><td className="py-2 px-3">Férias Proporcionais</td><td className="py-2 px-3 text-center text-slate-400">{calculo.avosFerias}/12</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valorFeriasProp)}</td><td className="py-2 px-3"></td></tr>
                                 <tr className="border-b border-slate-100"><td className="py-2 px-3">1/3 Férias Proporcionais</td><td className="py-2 px-3 text-center text-slate-400">1/3</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.tercoFeriasProp)}</td><td className="py-2 px-3"></td></tr>
                                 {ajustes.filter(a => a.tipo === 'Provento').map((aj, i) => (
@@ -475,7 +507,7 @@ function App() {
                             </tfoot>
                         </table>
 
-                        {/* Demonstrativo FGTS conforme modelo */}
+                        {/* Demonstrativo FGTS */}
                         {!calculo.isPedidoDemissao && (
                           <div className="bg-slate-50 border border-slate-200 rounded p-4 mb-6 print:bg-transparent print:border-slate-300">
                               <h3 className="text-[10px] font-bold text-slate-700 uppercase tracking-wider mb-3">Demonstrativo FGTS</h3>
@@ -502,7 +534,7 @@ function App() {
                             <span className="text-base font-bold text-slate-700 font-mono">{formatCurrency(calculo.rescisaoLiquida)}</span>
                         </div>
 
-                        {/* Total Geral a Receber conforme modelo */}
+                        {/* Total Geral a Receber */}
                         <div className="border-2 border-slate-900 p-6 flex justify-between items-center bg-white">
                             <div>
                                 <div className="text-[11px] font-black uppercase text-slate-900 tracking-wider">Total Geral a Receber</div>
@@ -567,7 +599,9 @@ function App() {
                     <FormInput className="flex-1" label="Data Demissão" name="dataDemissao" type="date" value={formData.dataDemissao} onChange={handleInputChange} />
                 </div>
                 <FormInput label="Tipo de Aviso Prévio" name="avisoTipo" options={[{ value: 'trabalhado', label: 'Trabalhado' }, { value: 'indenizado', label: 'Indenizado' }]} value={formData.avisoTipo} onChange={handleInputChange} />
+                
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
+
                 <button onClick={handleCalcular} className="w-full mt-4 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-lg shadow-lg transition-all flex justify-center items-center gap-2 text-sm transform active:scale-[0.99]"><span className="material-icons-round text-base">play_arrow</span> Calcular Rescisão</button>
             </div>
 
@@ -610,6 +644,17 @@ function App() {
                                     <LineItem label="Aviso Prévio Indenizado" value={calculo.valorAviso} subtext={calculo.diasAviso > 0 ? `${calculo.diasAviso} dias` : ''} type="plus" />
                                     <LineItem label="13º Salário Prop." value={calculo.valor13} subtext={`${calculo.avos13}/12 avos`} type="plus" />
                                     <LineItem label="13º s/ Aviso" value={calculo.valor13Indenizado} type="plus" />
+                                    
+                                    {/* Exibição das Férias Vencidas Simples */}
+                                    {calculo.valorFeriasVencidas > 0 && (
+                                        <LineItem label="Férias Vencidas + 1/3" value={calculo.valorFeriasVencidas + calculo.tercoFeriasVencidas} subtext={`${calculo.feriasVencidasQtd} período(s)`} type="plus" />
+                                    )}
+
+                                    {/* Exibição das Férias Vencidas em Dobro (Multa) */}
+                                    {calculo.valorFeriasDobro > 0 && (
+                                        <LineItem label="Férias em Dobro + 1/3" value={calculo.valorFeriasDobro + calculo.tercoFeriasDobro} subtext={`${calculo.feriasDobroQtd} multa(s)`} type="plus" />
+                                    )}
+
                                     <LineItem label="Férias Proporcionais" value={calculo.valorFeriasProp} subtext={`${calculo.avosFerias}/12 avos`} type="plus" />
                                     <LineItem label="1/3 Férias Prop." value={calculo.tercoFeriasProp} type="plus" />
                                     {ajustes.filter(a => a.tipo === 'Provento').map((aj, idx) => <LineItem key={`aj-p-${idx}`} label={aj.descricao} value={aj.valor} subtext="Ajuste Manual" type="plus" />)}
