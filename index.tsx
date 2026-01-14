@@ -113,12 +113,12 @@ const calcularIRRF = (baseCalculo: number) => {
 
 const Logo = () => (
   <div className="flex items-center gap-4">
-    <div className="bg-[#0f172a] p-3 rounded-2xl border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-      <span className="material-icons-round text-emerald-500 text-3xl block">account_balance_wallet</span>
+    <div className="bg-[#0f172a] p-3 rounded-2xl border border-[#10b981]/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+      <span className="material-icons-round text-[#10b981] text-3xl block">account_balance_wallet</span>
     </div>
     <div className="flex flex-col leading-none">
       <span className="text-white text-3xl font-extrabold tracking-tight">Vírgula</span>
-      <span className="text-emerald-500 text-sm font-black tracking-[0.2em] mt-1">CONTÁBIL</span>
+      <span className="text-[#10b981] text-sm font-black tracking-[0.2em] mt-1">CONTÁBIL</span>
     </div>
   </div>
 );
@@ -129,7 +129,7 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
     {options ? (
       <div className="relative">
         <select 
-          className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none text-slate-200 text-sm"
+          className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-[#10b981] focus:border-[#10b981] outline-none transition-all appearance-none text-slate-200 text-sm"
           {...props}
         >
           {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -141,7 +141,7 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
     ) : (
       <input 
         type={type}
-        className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-slate-200 placeholder-slate-500 text-sm"
+        className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-[#10b981] focus:border-[#10b981] outline-none transition-all text-slate-200 placeholder-slate-500 text-sm"
         {...props}
       />
     )}
@@ -149,9 +149,9 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
 );
 
 const ResultCard = ({ title, value, subtext, highlight = false, onClick }: any) => (
-  <div onClick={onClick} className={`bg-slate-900 p-5 rounded-2xl border ${highlight ? 'border-emerald-500 ring-1 ring-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-slate-800'} shadow-sm ${onClick ? 'cursor-pointer hover:border-emerald-500/50' : ''}`}>
+  <div onClick={onClick} className={`bg-slate-900 p-5 rounded-2xl border ${highlight ? 'border-[#10b981] ring-1 ring-[#10b981]/50 shadow-[0_0_30px_rgba(16,185,129,0.1)]' : 'border-slate-800'} shadow-sm ${onClick ? 'cursor-pointer hover:border-[#10b981]/50' : ''}`}>
     <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] mb-2">{title}</div>
-    <div className={`text-2xl font-black ${highlight ? 'text-emerald-400' : 'text-slate-100'} font-mono`}>{value}</div>
+    <div className={`text-2xl font-black ${highlight ? 'text-[#10b981]' : 'text-slate-100'} font-mono`}>{value}</div>
     {subtext && <div className="text-[10px] text-slate-400 mt-1 font-semibold">{subtext}</div>}
   </div>
 );
@@ -164,7 +164,7 @@ const LineItem = ({ label, value, subtext, type = 'neutral' }: any) => {
               <div className="text-sm font-semibold text-slate-300">{label}</div>
               {subtext && <div className="text-[10px] text-slate-500 mt-1 font-bold">{subtext}</div>}
             </div>
-            <span className={`text-sm font-mono font-black ${type === 'plus' ? 'text-emerald-400' : type === 'minus' ? 'text-rose-500' : 'text-slate-400'}`}>
+            <span className={`text-sm font-mono font-black ${type === 'plus' ? 'text-[#10b981]' : type === 'minus' ? 'text-rose-500' : 'text-slate-400'}`}>
                 {type === 'minus' ? '-' : ''} {formatCurrency(value)}
             </span>
         </div>
@@ -394,21 +394,21 @@ function App() {
           <div className="min-h-screen bg-[#020617] flex flex-col items-center py-6 no-print">
               <div className="w-full max-w-6xl mb-6 flex justify-center px-4">
                   <div className="bg-slate-900 px-6 py-4 rounded-3xl shadow-2xl border border-slate-800 flex flex-col md:flex-row items-center gap-6 w-full">
-                      <button onClick={() => setShowPrintPreview(false)} className="flex items-center gap-2 text-slate-400 hover:text-emerald-500 font-black text-sm transition-all">
+                      <button onClick={() => setShowPrintPreview(false)} className="flex items-center gap-2 text-slate-400 hover:text-[#10b981] font-black text-sm transition-all">
                           <span className="material-icons-round">arrow_back</span> Voltar
                       </button>
                       <div className="h-6 w-px bg-slate-800 hidden md:block"></div>
                       <div className="flex flex-wrap items-center gap-6 flex-grow">
                           <label className="flex items-center gap-2 cursor-pointer select-none">
-                              <input type="checkbox" checked={printSignatures} onChange={e => setPrintSignatures(e.target.checked)} className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 border-slate-700 bg-slate-950" />
+                              <input type="checkbox" checked={printSignatures} onChange={e => setPrintSignatures(e.target.checked)} className="w-4 h-4 rounded text-[#10b981] focus:ring-[#10b981] border-slate-700 bg-slate-950" />
                               <span className="text-sm font-bold text-slate-300">Incluir assinaturas</span>
                           </label>
                           <label className="flex items-center gap-2 cursor-pointer select-none">
-                              <input type="checkbox" checked={shrinkToFit} onChange={e => setShrinkToFit(e.target.checked)} className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 border-slate-700 bg-slate-950" />
+                              <input type="checkbox" checked={shrinkToFit} onChange={e => setShrinkToFit(e.target.checked)} className="w-4 h-4 rounded text-[#10b981] focus:ring-[#10b981] border-slate-700 bg-slate-950" />
                               <span className="text-sm font-bold text-slate-300">Modo Compacto</span>
                           </label>
                       </div>
-                      <button onClick={() => window.print()} className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-emerald-900/20 flex items-center gap-2 transition-all transform hover:-translate-y-1">
+                      <button onClick={() => window.print()} className="bg-[#10b981] hover:bg-[#10b981]/80 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-[#10b981]/20 flex items-center gap-2 transition-all transform hover:-translate-y-1">
                           <span className="material-icons-round">print</span> Imprimir
                       </button>
                   </div>
@@ -438,7 +438,7 @@ function App() {
                             <thead className="bg-slate-800 text-white text-[9px] uppercase">
                                 <tr>
                                     <th className="py-2 px-3 font-bold border-r border-slate-700">Rubrica</th>
-                                    <th className="py-2 px-3 text-center w-20 border-r border-slate-700">Ref.</th>
+                                    <th className="py-2 px-3 text-center w-20 border-r border-slate-700">Ref..</th>
                                     <th className="py-2 px-3 text-right w-32 border-r border-slate-700">Proventos</th>
                                     <th className="py-2 px-3 text-right w-32">Descontos</th>
                                 </tr>
@@ -528,8 +528,8 @@ function App() {
                 <div className="mb-6">
                     <label className="block text-[10px] font-black text-slate-500 mb-3 uppercase tracking-widest">Situação de Saída</label>
                     <div className="flex bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
-                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all uppercase tracking-tight ${formData.motivo === 'dispensa' ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Dispensa</button>
-                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all uppercase tracking-tight ${formData.motivo === 'pedido' ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
+                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all uppercase tracking-tight ${formData.motivo === 'dispensa' ? 'bg-[#10b981] text-white shadow-xl shadow-[#10b981]/20' : 'text-slate-500 hover:text-slate-300'}`}>Dispensa</button>
+                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all uppercase tracking-tight ${formData.motivo === 'pedido' ? 'bg-[#10b981] text-white shadow-xl shadow-[#10b981]/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
                     </div>
                 </div>
                 <FormInput label="Salário Base" name="salarioBase" type="number" value={formData.salarioBase} onChange={handleInputChange} />
@@ -542,7 +542,7 @@ function App() {
                 <FormInput label="Aviso Prévio" name="avisoTipo" options={[{ value: 'trabalhado', label: 'Trabalhado' }, { value: 'indenizado', label: 'Indenizado' }]} value={formData.avisoTipo} onChange={handleInputChange} />
 
                 <div className="space-y-3 mt-6">
-                    <button onClick={handleCalcular} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-2xl shadow-emerald-900/30 transition-all flex justify-center items-center gap-2 text-sm transform active:scale-[0.98] uppercase tracking-widest"><span className="material-icons-round text-lg">sync</span> Processar Cálculo</button>
+                    <button onClick={handleCalcular} className="w-full bg-[#10b981] hover:bg-[#10b981]/80 text-white font-black py-4 rounded-2xl shadow-2xl shadow-[#10b981]/30 transition-all flex justify-center items-center gap-2 text-sm transform active:scale-[0.98] uppercase tracking-widest"><span className="material-icons-round text-lg">sync</span> Processar Cálculo</button>
                     <button onClick={() => setShowFGTSModal(true)} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-black py-3 rounded-2xl transition-all flex justify-center items-center gap-2 text-[10px] uppercase tracking-widest"><span className="material-icons-round text-base">savings</span> Configurar FGTS</button>
                 </div>
             </div>
@@ -564,10 +564,10 @@ function App() {
                             <div className="bg-slate-900/50 rounded-3xl border border-slate-800 p-2 overflow-hidden flex flex-col h-full shadow-2xl">
                                 <div className="px-6 py-5 flex justify-between items-center border-b border-slate-800/50 mb-2">
                                     <div className="flex items-center gap-3">
-                                        <div className="bg-emerald-500/10 p-2 rounded-lg"><span className="material-icons-round text-emerald-500 text-base block">add_circle</span></div>
+                                        <div className="bg-[#10b981]/10 p-2 rounded-lg"><span className="material-icons-round text-[#10b981] text-base block">add_circle</span></div>
                                         <span className="text-xs font-black text-slate-200 uppercase tracking-widest">Proventos</span>
                                     </div>
-                                    <button onClick={() => setShowAdjustModal(true)} className="text-[10px] font-black text-emerald-500 hover:text-emerald-400 uppercase tracking-tighter transition-colors">AJUSTAR</button>
+                                    <button onClick={() => setShowAdjustModal(true)} className="text-[10px] font-black text-[#10b981] hover:text-[#10b981]/80 uppercase tracking-tighter transition-colors">AJUSTAR</button>
                                 </div>
                                 <div className="px-2 pb-2">
                                     <LineItem label="Saldo de Salário" value={calculo.saldoSalario} subtext={`${calculo.diasTrabalhados} dias`} type="plus" />
@@ -597,8 +597,8 @@ function App() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-6 pt-10 justify-center">
-                             <button onClick={() => setShowAdjustModal(true)} className="text-slate-200 bg-slate-900 border border-slate-800 hover:border-emerald-500 hover:shadow-2xl px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all"><span className="material-icons-round text-lg text-emerald-500">post_add</span> Lançar Rubrica</button>
-                             <button onClick={togglePrintPreview} className="text-white bg-emerald-600 hover:bg-emerald-500 px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-2xl shadow-emerald-900/40"><span className="material-icons-round text-lg">description</span> Gerar Demonstrativo</button>
+                             <button onClick={() => setShowAdjustModal(true)} className="text-slate-200 bg-slate-900 border border-slate-800 hover:border-[#10b981] hover:shadow-2xl px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all"><span className="material-icons-round text-lg text-[#10b981]">post_add</span> Lançar Rubrica</button>
+                             <button onClick={togglePrintPreview} className="text-white bg-[#10b981] hover:bg-[#10b981]/80 px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-2xl shadow-[#10b981]/40"><span className="material-icons-round text-lg">description</span> Gerar Demonstrativo</button>
                         </div>
                     </div>
                 )}
@@ -608,7 +608,7 @@ function App() {
 
       {/* MODAL FGTS */}
       {showFGTSModal && (
-        <div className="fixed inset-0 bg-brand-dark/80 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-fade-in no-print">
+        <div className="fixed inset-0 bg-[#020617]/80 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-fade-in no-print">
             <div className="bg-slate-900 rounded-[32px] shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-2xl border border-slate-800 overflow-hidden animate-slide-up">
                 <div className="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-900/80">
                     <h3 className="text-xl font-black text-white uppercase tracking-tighter">Ajuste de Saldo FGTS</h3>
@@ -616,10 +616,10 @@ function App() {
                 </div>
                 <div className="p-10 overflow-y-auto max-h-[60vh] custom-scrollbar bg-slate-900">
                     <div className="mb-8 bg-slate-950 p-6 rounded-2xl border border-slate-800">
-                        <label className="block text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-3">Saldo Base p/ Fins Rescisórios</label>
+                        <label className="block text-[10px] font-black text-[#10b981] uppercase tracking-[0.2em] mb-3">Saldo Base p/ Fins Rescisórios</label>
                         <div className="flex gap-4">
-                            <input type="number" className="flex-1 px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-lg font-mono" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(e.target.value === '' ? '' : Number(e.target.value))} placeholder="0.00" />
-                            <button onClick={preencherSalarioMinimo} className="px-6 bg-slate-800 hover:bg-slate-700 text-emerald-500 rounded-xl font-black text-[10px] uppercase tracking-tighter border border-slate-700">Sugestão S.M.</button>
+                            <input type="number" className="flex-1 px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-[#10b981] outline-none text-white text-lg font-mono" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(e.target.value === '' ? '' : Number(e.target.value))} placeholder="0.00" />
+                            <button onClick={preencherSalarioMinimo} className="px-6 bg-slate-800 hover:bg-slate-700 text-[#10b981] rounded-xl font-black text-[10px] uppercase tracking-tighter border border-slate-700">Sugestão S.M.</button>
                         </div>
                         <p className="text-[10px] text-slate-500 mt-3 italic">* Informe o saldo total depositado para cálculo da multa de 40%.</p>
                     </div>
@@ -632,7 +632,7 @@ function App() {
                                     <span className="text-xs font-bold text-slate-400 font-mono">{item.date}</span>
                                     <input 
                                         type="number" 
-                                        className="w-24 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs text-white font-mono focus:ring-1 focus:ring-emerald-500 outline-none"
+                                        className="w-24 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs text-white font-mono focus:ring-1 focus:ring-[#10b981] outline-none"
                                         value={item.value}
                                         onChange={(e) => updateFgtsValue(idx, Number(e.target.value))}
                                     />
@@ -643,7 +643,7 @@ function App() {
                 </div>
                 <div className="p-8 border-t border-slate-800 bg-slate-900 flex justify-end gap-4">
                     <button onClick={() => setShowFGTSModal(false)} className="px-8 py-3 text-slate-400 font-black uppercase text-xs hover:text-white">Sair</button>
-                    <button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-10 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-black uppercase text-xs shadow-xl transition-all transform active:scale-95">Salvar Alterações</button>
+                    <button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-10 py-3 bg-[#10b981] text-white rounded-xl hover:bg-[#10b981]/80 font-black uppercase text-xs shadow-xl transition-all transform active:scale-95">Salvar Alterações</button>
                 </div>
             </div>
         </div>
@@ -651,22 +651,22 @@ function App() {
 
       {/* MODAL AJUSTES */}
       {showAdjustModal && (
-        <div className="fixed inset-0 bg-brand-dark/80 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
+        <div className="fixed inset-0 bg-[#020617]/80 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
             <div className="bg-slate-900 rounded-[32px] shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md border border-slate-800 overflow-hidden animate-slide-up">
                 <div className="p-8 border-b border-slate-800 flex justify-between items-center"><h3 className="text-xl font-black text-white uppercase tracking-tighter">Lançamento Manual</h3><button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white transition-colors"><span className="material-icons-round text-3xl">close</span></button></div>
                 <form onSubmit={addAjuste} className="p-8 space-y-6">
-                    <div><label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm" placeholder="Ex: Adiantamento..." /></div>
+                    <div><label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-[#10b981] outline-none text-white text-sm" placeholder="Ex: Adiantamento..." /></div>
                     <div className="grid grid-cols-2 gap-4">
-                        <div><label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Valor</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-mono" placeholder="0.00" /></div>
-                        <div><label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
+                        <div><label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Valor</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-[#10b981] outline-none text-white text-sm font-mono" placeholder="0.00" /></div>
+                        <div><label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-[#10b981] outline-none text-white text-sm"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
                     </div>
-                    <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest transition-all">Inserir Rubrica</button>
+                    <button type="submit" className="w-full bg-[#10b981] hover:bg-[#10b981]/80 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest transition-all">Inserir Rubrica</button>
                 </form>
                 <div className="px-8 pb-8">
                     <h4 className="font-black text-[10px] uppercase text-slate-500 mb-4 tracking-widest">Itens Lançados</h4>
                     {ajustes.length === 0 ? <div className="text-[10px] text-slate-600 font-bold uppercase text-center py-6 bg-slate-950/50 rounded-2xl border border-dashed border-slate-800">Nenhum lançamento</div> : (
                         <ul className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                            {ajustes.map((aj, i) => (<li key={i} className="flex justify-between items-center text-xs bg-slate-950 p-4 rounded-xl border border-slate-800"><span className="font-bold text-slate-300 uppercase tracking-tight">{aj.descricao}</span><div className="flex items-center gap-4"><span className={`font-black font-mono ${aj.tipo === 'Provento' ? 'text-emerald-400' : 'text-rose-500'}`}>{aj.tipo === 'Provento' ? '+' : '-'} {formatCurrency(aj.valor)}</span><button onClick={() => setAjustes(ajustes.filter((_, idx) => idx !== i))} className="text-slate-600 hover:text-rose-500 transition-colors"><span className="material-icons-round text-sm">delete</span></button></div></li>))}
+                            {ajustes.map((aj, i) => (<li key={i} className="flex justify-between items-center text-xs bg-slate-950 p-4 rounded-xl border border-slate-800"><span className="font-bold text-slate-300 uppercase tracking-tight">{aj.descricao}</span><div className="flex items-center gap-4"><span className={`font-black font-mono ${aj.tipo === 'Provento' ? 'text-[#10b981]' : 'text-rose-500'}`}>{aj.tipo === 'Provento' ? '+' : '-'} {formatCurrency(aj.valor)}</span><button onClick={() => setAjustes(ajustes.filter((_, idx) => idx !== i))} className="text-slate-600 hover:text-rose-500 transition-colors"><span className="material-icons-round text-sm">delete</span></button></div></li>))}
                         </ul>
                     )}
                     <div className="mt-8 pt-4 border-t border-slate-800"><button onClick={() => { handleCalcular(); setShowAdjustModal(false); }} className="w-full py-4 bg-slate-950 text-slate-400 rounded-xl hover:bg-slate-900 border border-slate-800 font-black uppercase text-xs tracking-widest transition-all">Fechar</button></div>
