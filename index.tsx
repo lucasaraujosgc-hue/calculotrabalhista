@@ -201,7 +201,6 @@ function App() {
     if (formData.dataAdmissao && formData.dataDemissao) {
       const start = parseDate(formData.dataAdmissao);
       const end = parseDate(formData.dataDemissao);
-      // CORREÇÃO: iNaN para isNaN
       if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) return;
       const dates: {date: string, value: number}[] = [];
       let current = new Date(start.getFullYear(), start.getMonth(), 1);
@@ -220,6 +219,21 @@ function App() {
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const updateFgtsValue = (index: number, val: number) => {
+    const newData = [...fgtsManualData];
+    newData[index].value = val;
+    setFgtsManualData(newData);
+  };
+
+  const preencherSalarioMinimo = () => {
+    const newData = fgtsManualData.map(item => ({
+        ...item,
+        value: Number((getSalarioMinimo(parseDate(item.date + '-01')) * 0.08).toFixed(2))
+    }));
+    setFgtsManualData(newData);
+    setFgtsSaldoManual('');
   };
 
   const addAjuste = (e: React.FormEvent) => {
@@ -527,7 +541,10 @@ function App() {
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
                 <FormInput label="Aviso Prévio" name="avisoTipo" options={[{ value: 'trabalhado', label: 'Trabalhado' }, { value: 'indenizado', label: 'Indenizado' }]} value={formData.avisoTipo} onChange={handleInputChange} />
 
-                <button onClick={handleCalcular} className="w-full mt-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-2xl shadow-emerald-900/30 transition-all flex justify-center items-center gap-2 text-sm transform active:scale-[0.98] uppercase tracking-widest"><span className="material-icons-round text-lg">sync</span> Processar Cálculo</button>
+                <div className="space-y-3 mt-6">
+                    <button onClick={handleCalcular} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-2xl shadow-emerald-900/30 transition-all flex justify-center items-center gap-2 text-sm transform active:scale-[0.98] uppercase tracking-widest"><span className="material-icons-round text-lg">sync</span> Processar Cálculo</button>
+                    <button onClick={() => setShowFGTSModal(true)} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-black py-3 rounded-2xl transition-all flex justify-center items-center gap-2 text-[10px] uppercase tracking-widest"><span className="material-icons-round text-base">savings</span> Configurar FGTS</button>
+                </div>
             </div>
 
             <div className="w-full lg:w-2/3">
@@ -540,7 +557,7 @@ function App() {
                     <div className="space-y-6 animate-fade-in">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <ResultCard title="Valor Líquido" value={formatCurrency(calculo.rescisaoLiquida)} subtext="Rescisão pronta para pagamento" highlight />
-                            <ResultCard title="FGTS + Multa (40%)" value={formatCurrency(calculo.totalContaFGTS)} subtext={calculo.isPedidoDemissao ? 'Indisponível p/ saque' : 'Saldo base + acréscimos'} />
+                            <ResultCard title="FGTS + Multa (40%)" onClick={() => setShowFGTSModal(true)} value={formatCurrency(calculo.totalContaFGTS)} subtext={calculo.isPedidoDemissao ? 'Indisponível p/ saque' : 'Saldo base + acréscimos'} />
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -597,13 +614,37 @@ function App() {
                     <h3 className="text-xl font-black text-white uppercase tracking-tighter">Ajuste de Saldo FGTS</h3>
                     <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white transition-colors"><span className="material-icons-round text-3xl">close</span></button>
                 </div>
-                <div className="p-10 overflow-y-auto max-h-[70vh] custom-scrollbar bg-slate-900">
+                <div className="p-10 overflow-y-auto max-h-[60vh] custom-scrollbar bg-slate-900">
                     <div className="mb-8 bg-slate-950 p-6 rounded-2xl border border-slate-800">
                         <label className="block text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-3">Saldo Base p/ Fins Rescisórios</label>
-                        <input type="number" className="w-full px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-lg font-mono" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(Number(e.target.value))} />
+                        <div className="flex gap-4">
+                            <input type="number" className="flex-1 px-5 py-4 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-lg font-mono" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(e.target.value === '' ? '' : Number(e.target.value))} placeholder="0.00" />
+                            <button onClick={preencherSalarioMinimo} className="px-6 bg-slate-800 hover:bg-slate-700 text-emerald-500 rounded-xl font-black text-[10px] uppercase tracking-tighter border border-slate-700">Sugestão S.M.</button>
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-3 italic">* Informe o saldo total depositado para cálculo da multa de 40%.</p>
+                    </div>
+
+                    <div className="space-y-4">
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Extrato de Depósitos por Mês</h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {fgtsManualData.map((item, idx) => (
+                                <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+                                    <span className="text-xs font-bold text-slate-400 font-mono">{item.date}</span>
+                                    <input 
+                                        type="number" 
+                                        className="w-24 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs text-white font-mono focus:ring-1 focus:ring-emerald-500 outline-none"
+                                        value={item.value}
+                                        onChange={(e) => updateFgtsValue(idx, Number(e.target.value))}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-                <div className="p-8 border-t border-slate-800 bg-slate-900 flex justify-end gap-4"><button onClick={() => setShowFGTSModal(false)} className="px-8 py-3 text-slate-400 font-black uppercase text-xs hover:text-white">Sair</button><button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-10 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-black uppercase text-xs shadow-xl">Salvar Alterações</button></div>
+                <div className="p-8 border-t border-slate-800 bg-slate-900 flex justify-end gap-4">
+                    <button onClick={() => setShowFGTSModal(false)} className="px-8 py-3 text-slate-400 font-black uppercase text-xs hover:text-white">Sair</button>
+                    <button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-10 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-black uppercase text-xs shadow-xl transition-all transform active:scale-95">Salvar Alterações</button>
+                </div>
             </div>
         </div>
       )}
