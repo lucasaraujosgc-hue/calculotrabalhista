@@ -43,8 +43,6 @@ const HISTORICO_SALARIO_MINIMO = [
   { date: '2022-01-01', value: 1212.00 },
   { date: '2021-01-01', value: 1100.00 },
   { date: '2020-02-01', value: 1045.00 },
-  { date: '2020-01-01', value: 1039.00 },
-  { date: '2019-01-01', value: 998.00 },
 ];
 
 const getSalarioMinimo = (date: Date): number => {
@@ -85,22 +83,22 @@ const calcularIRRF = (baseCalculo: number) => {
 
 const Logo = () => (
   <div className="flex items-center gap-2">
-    <div className="bg-[#0f172a] p-2 rounded-lg border border-[#10b981]/30">
-      <span className="material-icons-round text-[#10b981] text-2xl block">account_balance_wallet</span>
+    <div className="bg-[#0f172a] p-1.5 rounded-lg border border-[#10b981]/30">
+      <span className="material-icons-round text-[#10b981] text-xl block">account_balance_wallet</span>
     </div>
     <div className="flex flex-col leading-none">
-      <span className="text-white text-2xl font-black tracking-tight">Vírgula</span>
-      <span className="text-[#10b981] text-[10px] font-black tracking-[0.2em]">CONTÁBIL</span>
+      <span className="text-white text-xl font-black tracking-tight">Vírgula</span>
+      <span className="text-[#10b981] text-[8px] font-black tracking-[0.2em]">CONTÁBIL</span>
     </div>
   </div>
 );
 
 const FormInput = ({ label, type = "text", className = "", options, ...props }: any) => (
   <div className={`mb-2 ${className}`}>
-    <label className="block text-[10px] font-black text-slate-500 mb-1 uppercase tracking-wider">{label}</label>
+    <label className="block text-[9px] font-black text-slate-500 mb-0.5 uppercase tracking-wider">{label}</label>
     {options ? (
       <select 
-        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-[#10b981] outline-none text-slate-200 text-xs appearance-none"
+        className="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-[#10b981] outline-none text-slate-200 text-[11px] appearance-none"
         {...props}
       >
         {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -108,7 +106,7 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
     ) : (
       <input 
         type={type}
-        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-[#10b981] outline-none text-slate-200 text-xs"
+        className="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-[#10b981] outline-none text-slate-200 text-[11px]"
         {...props}
       />
     )}
@@ -116,22 +114,22 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
 );
 
 const ResultCard = ({ title, value, subtext, highlight = false, onClick }: any) => (
-  <div onClick={onClick} className={`bg-slate-900 p-4 rounded-xl border ${highlight ? 'border-[#10b981] ring-1 ring-[#10b981]/30 shadow-lg shadow-[#10b981]/5' : 'border-slate-800'} ${onClick ? 'cursor-pointer hover:bg-slate-800 transition-all' : ''}`}>
-    <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">{title}</div>
-    <div className={`text-xl font-black ${highlight ? 'text-[#10b981]' : 'text-slate-100'} font-mono`}>{value}</div>
-    {subtext && <div className="text-[9px] text-slate-400 mt-1 font-bold">{subtext}</div>}
+  <div onClick={onClick} className={`bg-slate-900 p-3 rounded-xl border ${highlight ? 'border-[#10b981] ring-1 ring-[#10b981]/30 shadow-lg shadow-[#10b981]/5' : 'border-slate-800'} ${onClick ? 'cursor-pointer hover:bg-slate-800 transition-all' : ''}`}>
+    <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">{title}</div>
+    <div className={`text-lg font-black ${highlight ? 'text-[#10b981]' : 'text-slate-100'} font-mono leading-tight`}>{value}</div>
+    {subtext && <div className="text-[8px] text-slate-400 mt-0.5 font-bold leading-tight">{subtext}</div>}
   </div>
 );
 
 const LineItem = ({ label, value, subtext, type = 'neutral' }: { label: string, value: number, subtext?: string, type?: 'plus'|'minus'|'neutral' }) => {
     if (Math.abs(value) < 0.01) return null;
     return (
-        <div className="flex justify-between items-center py-2 border-b border-slate-800 last:border-0 hover:bg-slate-800/20 px-2 rounded transition-colors">
+        <div className="flex justify-between items-center py-1.5 border-b border-slate-800 last:border-0 hover:bg-slate-800/20 px-1 rounded transition-colors">
             <div>
-              <div className="text-[11px] font-bold text-slate-300">{label}</div>
+              <div className="text-[10px] font-bold text-slate-300">{label}</div>
               {subtext && <div className="text-[8px] text-slate-500 font-bold">{subtext}</div>}
             </div>
-            <span className={`text-[11px] font-mono font-black ${type === 'plus' ? 'text-[#10b981]' : type === 'minus' ? 'text-rose-500' : 'text-slate-400'}`}>
+            <span className={`text-[10px] font-mono font-black ${type === 'plus' ? 'text-[#10b981]' : type === 'minus' ? 'text-rose-500' : 'text-slate-400'}`}>
                 {type === 'minus' ? '-' : ''} {formatCurrency(value)}
             </span>
         </div>
@@ -159,8 +157,6 @@ function App() {
   const [fgtsManualData, setFgtsManualData] = useState<{date: string, value: number}[]>([]);
   const [fgtsSaldoManual, setFgtsSaldoManual] = useState<number | ''>('');
   const [ajustes, setAjustes] = useState<{descricao: string, valor: number, tipo: 'Provento' | 'Desconto'}[]>([]);
-
-  const totalAjustesDescontos = ajustes.filter(a => a.tipo === 'Desconto').reduce((acc, c) => acc + c.valor, 0);
 
   useEffect(() => {
     if (formData.dataAdmissao && formData.dataDemissao) {
@@ -236,7 +232,6 @@ function App() {
     const valorFeriasProp = (salarioTotal / 12) * avosFerias;
     const tercoFeriasProp = valorFeriasProp / 3;
 
-    // FGTS Restaurado
     const saldoFGTSBase = fgtsSaldoManual !== '' ? Number(fgtsSaldoManual) : fgtsManualData.reduce((acc, curr) => acc + curr.value, 0);
     const fgtsMesRescisao = saldoSalario * 0.08;
     const fgts13 = valor13 * 0.08;
@@ -334,53 +329,53 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-300 flex justify-center py-6 px-4">
+    <div className="min-h-screen bg-[#020617] text-slate-300 flex justify-center py-4 px-4 overflow-x-hidden">
       <div className="w-full max-w-5xl">
-        <header className="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+        <header className="flex justify-between items-center mb-4 border-b border-slate-800 pb-2">
             <Logo />
             <div className="text-right hidden sm:block">
-                <div className="text-white font-black text-sm uppercase">Rescisão Online v2.3</div>
-                <div className="text-[8px] text-slate-500 font-black uppercase tracking-[0.2em]">Vírgula Contábil • Segurança Garantida</div>
+                <div className="text-white font-black text-xs uppercase">Rescisão Online v2.3</div>
+                <div className="text-[7px] text-slate-500 font-black uppercase tracking-[0.2em]">Vírgula Contábil</div>
             </div>
         </header>
 
-        <div className="flex flex-col md:flex-row gap-6">
-            <aside className="w-full md:w-[320px] bg-slate-900/40 p-5 rounded-2xl border border-slate-800 backdrop-blur-sm h-fit">
-                <div className="flex bg-slate-950 p-1 rounded-xl mb-4 border border-slate-800">
-                    <button onClick={() => setFormData({...formData, motivo: 'dispensa'})} className={`flex-1 py-2 text-[10px] font-black rounded-lg transition-all uppercase ${formData.motivo === 'dispensa' ? 'bg-[#10b981] text-white shadow-lg' : 'text-slate-500'}`}>Dispensa</button>
-                    <button onClick={() => setFormData({...formData, motivo: 'pedido'})} className={`flex-1 py-2 text-[10px] font-black rounded-lg transition-all uppercase ${formData.motivo === 'pedido' ? 'bg-[#10b981] text-white shadow-lg' : 'text-slate-500'}`}>Pedido</button>
+        <div className="flex flex-col md:flex-row gap-4">
+            <aside className="w-full md:w-[280px] bg-slate-900/40 p-4 rounded-2xl border border-slate-800 backdrop-blur-sm h-fit">
+                <div className="flex bg-slate-950 p-1 rounded-xl mb-3 border border-slate-800">
+                    <button onClick={() => setFormData({...formData, motivo: 'dispensa'})} className={`flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all uppercase ${formData.motivo === 'dispensa' ? 'bg-[#10b981] text-white shadow-lg' : 'text-slate-500'}`}>Dispensa</button>
+                    <button onClick={() => setFormData({...formData, motivo: 'pedido'})} className={`flex-1 py-1.5 text-[9px] font-black rounded-lg transition-all uppercase ${formData.motivo === 'pedido' ? 'bg-[#10b981] text-white shadow-lg' : 'text-slate-500'}`}>Pedido</button>
                 </div>
-                <div className="grid grid-cols-2 gap-x-3">
-                    <FormInput label="Salário Base" name="salarioBase" type="number" value={formData.salarioBase} onChange={handleInputChange} />
+                <div className="grid grid-cols-2 gap-x-2">
+                    <FormInput label="Salário" name="salarioBase" type="number" value={formData.salarioBase} onChange={handleInputChange} />
                     <FormInput label="Insalubr." name="insalubridade" type="number" value={formData.insalubridade} onChange={handleInputChange} />
                     <FormInput label="Admissão" name="dataAdmissao" type="date" value={formData.dataAdmissao} onChange={handleInputChange} />
                     <FormInput label="Demissão" name="dataDemissao" type="date" value={formData.dataDemissao} onChange={handleInputChange} />
                 </div>
-                <FormInput label="Aviso Prévio" name="avisoTipo" options={[{value:'trabalhado', label:'Trabalhado'}, {value:'indenizado', label:'Indenizado'}]} value={formData.avisoTipo} onChange={handleInputChange} />
-                <FormInput label="Férias Vencidas" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
+                <FormInput label="Aviso" name="avisoTipo" options={[{value:'trabalhado', label:'Trabalhado'}, {value:'indenizado', label:'Indenizado'}]} value={formData.avisoTipo} onChange={handleInputChange} />
+                <FormInput label="Férias Venc." name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
                 
-                <div className="flex gap-2 mt-4">
-                    <button onClick={handleCalcular} className="flex-1 bg-[#10b981] hover:bg-[#10b981]/90 text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest flex justify-center items-center gap-2 shadow-lg shadow-[#10b981]/20"><span className="material-icons-round text-lg">sync</span> Calcular</button>
-                    <button onClick={() => setShowFGTSModal(true)} className="bg-slate-800 p-3 rounded-xl text-[#10b981] border border-slate-700 hover:bg-slate-700 transition-colors" title="Configurar FGTS"><span className="material-icons-round text-lg">savings</span></button>
+                <div className="flex gap-2 mt-2">
+                    <button onClick={handleCalcular} className="flex-1 bg-[#10b981] hover:bg-[#10b981]/90 text-white font-black py-2.5 rounded-xl text-[10px] uppercase tracking-widest flex justify-center items-center gap-2 shadow-lg shadow-[#10b981]/10"><span className="material-icons-round text-base">sync</span> Calcular</button>
+                    <button onClick={() => setShowFGTSModal(true)} className="bg-slate-800 p-2 rounded-xl text-[#10b981] border border-slate-700 hover:bg-slate-700 transition-colors"><span className="material-icons-round text-base">savings</span></button>
                 </div>
             </aside>
 
-            <main className="flex-1 space-y-4">
+            <main className="flex-1 space-y-3">
                 {!calculo ? (
-                    <div className="bg-slate-900/10 border-2 border-dashed border-slate-800 rounded-2xl h-[450px] flex flex-col items-center justify-center text-slate-700">
-                        <span className="material-icons-round text-6xl text-slate-800 mb-2">query_stats</span>
-                        <div className="text-[10px] font-black uppercase tracking-[0.4em]">Aguardando Parâmetros</div>
+                    <div className="bg-slate-900/10 border-2 border-dashed border-slate-800 rounded-2xl h-[350px] flex flex-col items-center justify-center text-slate-700">
+                        <span className="material-icons-round text-5xl text-slate-800 mb-2">query_stats</span>
+                        <div className="text-[9px] font-black uppercase tracking-[0.4em]">Aguardando Parâmetros</div>
                     </div>
                 ) : (
-                    <div className="space-y-4 animate-fade-in">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <ResultCard title="Líquido Rescisório" value={formatCurrency(calculo.rescisaoLiquida)} highlight />
-                            <ResultCard title="FGTS Total (Saque)" value={formatCurrency(calculo.totalFGTS)} subtext={`Base Multa: ${formatCurrency(calculo.baseMulta)}`} highlight onClick={() => setShowFGTSModal(true)} />
+                    <div className="space-y-3 animate-fade-in">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <ResultCard title="Líquido a Receber" value={formatCurrency(calculo.rescisaoLiquida)} highlight />
+                            <ResultCard title="FGTS Saque Total" value={formatCurrency(calculo.totalFGTS)} subtext={`Base p/ Multa: ${formatCurrency(calculo.baseMulta)}`} highlight onClick={() => setShowFGTSModal(true)} />
                         </div>
 
-                        <div className="bg-slate-900/40 rounded-2xl border border-slate-800 p-5">
-                            <h4 className="text-[10px] font-black uppercase text-[#10b981] mb-4 flex items-center gap-2"> <span className="material-icons-round text-sm">visibility</span> Detalhamento Financeiro</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-1">
+                        <div className="bg-slate-900/40 rounded-2xl border border-slate-800 p-4">
+                            <h4 className="text-[9px] font-black uppercase text-[#10b981] mb-2 flex items-center gap-2"> <span className="material-icons-round text-xs">visibility</span> Detalhamento Financeiro</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-0.5">
                                 <LineItem label="Saldo de Salário" value={calculo.saldoSalario} subtext={`${calculo.diasTrabalhados} dias`} type="plus" />
                                 <LineItem label="13º Salário Prop." value={calculo.valor13} subtext={`${calculo.avos13}/12 avos`} type="plus" />
                                 <LineItem label="Férias Prop. + 1/3" value={calculo.valorFeriasProp + calculo.tercoFeriasProp} subtext={`${calculo.avosFerias}/12 avos`} type="plus" />
@@ -392,22 +387,22 @@ function App() {
                             </div>
                         </div>
 
-                        <div className="bg-slate-900/40 rounded-2xl border border-slate-800 p-5">
-                            <div className="flex justify-between items-center mb-4">
-                                <h4 className="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2"> Detalhamento do FGTS</h4>
-                                <span className="text-[8px] text-[#10b981] font-black border border-[#10b981]/30 px-2 py-0.5 rounded uppercase">Fins Rescisórios</span>
+                        <div className="bg-slate-900/40 rounded-2xl border border-slate-800 p-4">
+                            <div className="flex justify-between items-center mb-2">
+                                <h4 className="text-[9px] font-black uppercase text-slate-400 flex items-center gap-2"> Detalhamento do FGTS</h4>
+                                <span className="text-[7px] text-[#10b981] font-black border border-[#10b981]/30 px-1.5 py-0.5 rounded uppercase">Multa 40%</span>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-2">
-                                <div className="flex justify-between text-[11px]"> <span className="text-slate-500">Saldo Base Informado:</span> <span className="font-mono font-bold">{formatCurrency(calculo.saldoFGTSBase)}</span> </div>
-                                <div className="flex justify-between text-[11px]"> <span className="text-slate-500">FGTS Mês Rescisão:</span> <span className="font-mono font-bold text-[#10b981]">{formatCurrency(calculo.fgtsMesRescisao)}</span> </div>
-                                <div className="flex justify-between text-[11px] border-t border-slate-800 pt-2"> <span className="text-slate-500">Base p/ Multa 40%:</span> <span className="font-mono font-bold">{formatCurrency(calculo.baseMulta)}</span> </div>
-                                <div className="flex justify-between text-[11px] border-t border-slate-800 pt-2"> <span className="text-slate-500">Multa 40%:</span> <span className="font-mono font-bold text-rose-500">{formatCurrency(calculo.multa40)}</span> </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
+                                <div className="flex justify-between text-[10px]"> <span className="text-slate-500">Saldo Informado:</span> <span className="font-mono font-bold">{formatCurrency(calculo.saldoFGTSBase)}</span> </div>
+                                <div className="flex justify-between text-[10px]"> <span className="text-slate-500">Mês Rescisão + 13º:</span> <span className="font-mono font-bold text-[#10b981]">{formatCurrency(calculo.fgtsMesRescisao)}</span> </div>
+                                <div className="flex justify-between text-[10px] border-t border-slate-800 pt-1"> <span className="text-slate-500">Base p/ Multa:</span> <span className="font-mono font-bold">{formatCurrency(calculo.baseMulta)}</span> </div>
+                                <div className="flex justify-between text-[10px] border-t border-slate-800 pt-1"> <span className="text-slate-500">Multa 40%:</span> <span className="font-mono font-bold text-rose-500">{formatCurrency(calculo.multa40)}</span> </div>
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                            <button onClick={() => setShowAdjustModal(true)} className="bg-slate-900 border border-slate-800 text-slate-300 px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"> <span className="material-icons-round text-base">add_box</span> Lançar Rubrica </button>
-                            <button onClick={() => setShowPrintPreview(true)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 transition-all"> <span className="material-icons-round text-base">description</span> Imprimir Demonstrativo </button>
+                        <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
+                            <button onClick={() => setShowAdjustModal(true)} className="bg-slate-900 border border-slate-800 text-slate-300 px-4 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"> <span className="material-icons-round text-sm">add_box</span> Adicionar Rubrica </button>
+                            <button onClick={() => setShowPrintPreview(true)} className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 transition-all"> <span className="material-icons-round text-sm">description</span> Relatório de Impressão </button>
                         </div>
                     </div>
                 )}
@@ -417,29 +412,28 @@ function App() {
 
       {/* MODAL FGTS */}
       {showFGTSModal && (
-        <div className="fixed inset-0 bg-[#020617]/90 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
+        <div className="fixed inset-0 bg-[#020617]/95 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
             <div className="bg-slate-900 rounded-3xl w-full max-w-lg border border-slate-800 overflow-hidden shadow-2xl animate-slide-up">
-                <div className="p-5 border-b border-slate-800 flex justify-between items-center">
-                    <h3 className="text-sm font-black text-white uppercase tracking-tighter">Ajuste de Saldo FGTS</h3>
-                    <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white"><span className="material-icons-round text-2xl">close</span></button>
+                <div className="p-4 border-b border-slate-800 flex justify-between items-center">
+                    <h3 className="text-xs font-black text-white uppercase tracking-tighter">Ajuste de Saldo FGTS</h3>
+                    <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white"><span className="material-icons-round text-xl">close</span></button>
                 </div>
-                <div className="p-6 bg-slate-950 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <div className="p-5 bg-slate-950 space-y-4 max-h-[65vh] overflow-y-auto custom-scrollbar">
                     <div>
-                        <label className="block text-[10px] font-black text-[#10b981] uppercase mb-2">Saldo p/ Fins Rescisórios (Existente em Conta)</label>
+                        <label className="block text-[9px] font-black text-[#10b981] uppercase mb-1.5">Saldo Atual em Conta (Extrato)</label>
                         <div className="flex gap-2">
-                            <input type="number" className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white font-mono text-sm outline-none" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(e.target.value === '' ? '' : Number(e.target.value))} placeholder="0.00" />
-                            <button onClick={preencherSalarioMinimo} className="bg-slate-800 text-[#10b981] px-4 rounded-xl text-[9px] font-black uppercase border border-slate-700">Auto S.M.</button>
+                            <input type="number" className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs outline-none" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(e.target.value === '' ? '' : Number(e.target.value))} placeholder="0.00" />
+                            <button onClick={preencherSalarioMinimo} className="bg-slate-800 text-[#10b981] px-3 rounded-xl text-[8px] font-black uppercase border border-slate-700">Auto S.M.</button>
                         </div>
-                        <p className="text-[9px] text-slate-500 mt-2 italic">* Utilize o valor do extrato atual para o cálculo da multa de 40%.</p>
                     </div>
 
-                    <div className="space-y-3">
-                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lançamentos Mensais (8%)</h4>
-                      <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Memória de Cálculo (Lançamentos Mensais)</h4>
+                      <div className="grid grid-cols-2 gap-2">
                           {fgtsManualData.map((item, idx) => (
-                              <div key={idx} className="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-center">
-                                  <span className="text-[9px] font-bold text-slate-500">{item.date}</span>
-                                  <input type="number" className="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-right text-[10px] text-white w-20" value={item.value} onChange={(e) => {
+                              <div key={idx} className="bg-slate-900 p-1.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                                  <span className="text-[8px] font-bold text-slate-500">{item.date}</span>
+                                  <input type="number" className="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-right text-[10px] text-white w-16" value={item.value} onChange={(e) => {
                                       const newData = [...fgtsManualData];
                                       newData[idx].value = Number(e.target.value);
                                       setFgtsManualData(newData);
@@ -449,9 +443,9 @@ function App() {
                       </div>
                     </div>
                 </div>
-                <div className="p-5 flex justify-end gap-3 bg-slate-900 border-t border-slate-800">
-                    <button onClick={() => setShowFGTSModal(false)} className="px-6 py-2 text-slate-500 text-[10px] font-black uppercase">Fechar</button>
-                    <button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-8 py-2 bg-[#10b981] text-white rounded-xl text-[10px] font-black uppercase shadow-lg shadow-[#10b981]/10">Aplicar Saldo</button>
+                <div className="p-4 flex justify-end gap-3 bg-slate-900 border-t border-slate-800">
+                    <button onClick={() => setShowFGTSModal(false)} className="px-4 py-1.5 text-slate-500 text-[9px] font-black uppercase">Fechar</button>
+                    <button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-6 py-1.5 bg-[#10b981] text-white rounded-xl text-[9px] font-black uppercase shadow-lg shadow-[#10b981]/10">Salvar Alterações</button>
                 </div>
             </div>
         </div>
@@ -459,28 +453,28 @@ function App() {
 
       {/* MODAL AJUSTES */}
       {showAdjustModal && (
-        <div className="fixed inset-0 bg-[#020617]/90 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
+        <div className="fixed inset-0 bg-[#020617]/95 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
             <div className="bg-slate-900 rounded-3xl w-full max-w-sm border border-slate-800 overflow-hidden shadow-2xl animate-slide-up">
-                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
-                    <h3 className="text-xs font-black text-white uppercase">Novo Lançamento</h3>
-                    <button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white"><span className="material-icons-round text-xl">close</span></button>
+                <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                    <h3 className="text-[10px] font-black text-white uppercase">Novo Lançamento</h3>
+                    <button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white"><span className="material-icons-round text-lg">close</span></button>
                 </div>
-                <form onSubmit={addAjuste} className="p-6 space-y-4 bg-slate-950">
-                    <input name="descAjuste" required className="w-full bg-slate-900 border border-slate-700 px-4 py-3 rounded-xl text-white text-xs outline-none" placeholder="Ex: Adiantamento, Quebra de Caixa..." />
+                <form onSubmit={addAjuste} className="p-5 space-y-3 bg-slate-950">
+                    <input name="descAjuste" required className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-white text-xs outline-none" placeholder="Descrição (ex: Adiantamento)" />
                     <div className="flex gap-2">
-                        <input name="valAjuste" type="number" step="0.01" required className="flex-1 bg-slate-900 border border-slate-700 px-4 py-3 rounded-xl text-white text-xs font-mono outline-none" placeholder="0.00" />
-                        <select name="tipoAjuste" className="bg-slate-900 border border-slate-700 px-2 py-3 rounded-xl text-white text-[10px] outline-none"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select>
+                        <input name="valAjuste" type="number" step="0.01" required className="flex-1 bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-white text-xs font-mono outline-none" placeholder="0.00" />
+                        <select name="tipoAjuste" className="bg-slate-900 border border-slate-700 px-1 py-2 rounded-xl text-white text-[9px] outline-none"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select>
                     </div>
-                    <button type="submit" className="w-full bg-emerald-600 text-white py-3 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-emerald-900/20 transition-all">Inserir Rubrica</button>
+                    <button type="submit" className="w-full bg-emerald-600 text-white py-2 rounded-xl font-black uppercase text-[9px] tracking-widest shadow-lg shadow-emerald-900/20 transition-all">Inserir Rubrica</button>
                 </form>
-                <div className="p-5 border-t border-slate-800 bg-slate-900 max-h-40 overflow-y-auto custom-scrollbar">
-                    <ul className="space-y-2">
-                        {ajustes.map((aj, i) => (<li key={i} className="flex justify-between items-center text-[10px] bg-slate-950 p-2.5 rounded-lg border border-slate-800"><span className="text-slate-400 font-bold uppercase">{aj.descricao}</span><div className="flex gap-3"><span className={aj.tipo === 'Provento' ? 'text-[#10b981] font-black' : 'text-rose-500 font-black'}>{formatCurrency(aj.valor)}</span><button onClick={() => setAjustes(ajustes.filter((_, idx) => idx !== i))} className="text-slate-600 hover:text-rose-500">×</button></div></li>))}
-                        {ajustes.length === 0 && <li className="text-center text-[9px] text-slate-700 uppercase font-black">Nenhum item lançado</li>}
+                <div className="p-4 border-t border-slate-800 bg-slate-900 max-h-32 overflow-y-auto custom-scrollbar">
+                    <ul className="space-y-1.5">
+                        {ajustes.map((aj, i) => (<li key={i} className="flex justify-between items-center text-[9px] bg-slate-950 p-2 rounded-lg border border-slate-800"><span className="text-slate-400 font-bold uppercase">{aj.descricao}</span><div className="flex gap-3"><span className={aj.tipo === 'Provento' ? 'text-[#10b981] font-black' : 'text-rose-500 font-black'}>{formatCurrency(aj.valor)}</span><button onClick={() => setAjustes(ajustes.filter((_, idx) => idx !== i))} className="text-slate-600 hover:text-rose-500 text-xs">×</button></div></li>))}
+                        {ajustes.length === 0 && <li className="text-center text-[8px] text-slate-700 uppercase font-black py-2">Nenhum item manual</li>}
                     </ul>
                 </div>
-                <div className="p-4 bg-slate-900 border-t border-slate-800 text-center">
-                    <button onClick={() => { handleCalcular(); setShowAdjustModal(false); }} className="text-[9px] text-slate-500 uppercase font-black hover:text-white transition-colors">Voltar p/ Painel</button>
+                <div className="p-3 bg-slate-900 border-t border-slate-800 text-center">
+                    <button onClick={() => { handleCalcular(); setShowAdjustModal(false); }} className="text-[8px] text-slate-500 uppercase font-black hover:text-white transition-colors">Confirmar e Sair</button>
                 </div>
             </div>
         </div>
