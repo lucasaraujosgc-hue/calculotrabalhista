@@ -54,7 +54,7 @@ const getSalarioMinimo = (date: Date): number => {
   return 1412.00;
 };
 
-// ATUALIZADO: Faixas conforme imagem fornecida
+// Faixas conforme imagem fornecida
 const calcularINSS = (baseCalculo: number) => {
   if (baseCalculo <= 0) return 0;
   
@@ -80,7 +80,7 @@ const calcularINSS = (baseCalculo: number) => {
   return Math.round(desconto * 100) / 100;
 };
 
-// ATUALIZADO: Lógica IRRF com Desconto Simplificado
+// Lógica IRRF com Desconto Simplificado
 const calcularIRRF = (baseCalculo: number) => {
   if (baseCalculo <= 0) return 0;
 
@@ -94,32 +94,15 @@ const calcularIRRF = (baseCalculo: number) => {
       return Math.max(0, imposto);
   };
 
-  // Cálculo Tradicional (Deduções legais seriam aplicadas aqui, ex: dependentes, inss)
-  // Como a baseCalculo recebida já é (Salario - INSS), usamos ela direto pro tradicional
   const irrfTradicional = calcularImpostoPuro(baseCalculo);
-
-  // Cálculo Simplificado: Desconto fixo de R$ 564,80 na base bruta (ignorando INSS para a verificação da faixa simplificada, mas na prática contábil geralmente compara-se o valor final)
-  // Simplificação para o app: Base - 564.80
-  // *Nota: A regra oficial aplica 20% da faixa 1 de isenção como desconto simplificado (564,80).
-  // Se esse desconto for maior que as deduções legais (INSS), compensa.
-  // Aqui vamos assumir a lógica de comparação do valor final do imposto.
   
-  // Recuperando a base bruta aproximada (Base + INSS) para aplicar o simplificado corretamente seria complexo sem passar o INSS.
-  // Vamos usar a lógica mais comum em calculadoras simples:
-  // Base IRRF Simplificada = (Base Bruta - 564,80). 
-  // O parametro baseCalculo recebido aqui já é (Bruto - INSS).
-  // Vamos aproximar: compara o imposto da base atual com o imposto de uma base onde a dedução fosse 564,80 em vez do INSS.
-  // Como não temos o valor do INSS dentro desta função isolada, vamos aplicar o método mais benéfico matematicamente sobre a base tributável.
-  
-  const irrfSimplificado = calcularImpostoPuro(Math.max(0, baseCalculo + 0 - 564.80)); // 0 aqui seria onde entraria a diferença do INSS se tivessemos.
-  
-  // Para garantir precisão sem refatorar todo o código, vamos manter o cálculo padrão atualizado com as faixas, 
-  // mas incluiremos uma lógica de "teto de isenção" do simplificado (2 salários mínimos aprox).
+  // Simplificação: aplica tabela sobre (base - 564.80)
+  const irrfSimplificado = calcularImpostoPuro(Math.max(0, baseCalculo + 0 - 564.80));
   
   return Math.min(irrfTradicional, irrfSimplificado); 
 };
 
-// --- COMPONENTES VISUAIS (TEMA DARK/GOLD) ---
+// --- COMPONENTES VISUAIS (TEMA DARK/GREEN) ---
 
 const FormInput = ({ label, type = "text", className = "", options, ...props }: any) => (
   <div className={`mb-4 ${className}`}>
@@ -127,19 +110,19 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
     {options ? (
       <div className="relative">
         <select 
-          className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all appearance-none text-slate-200 text-sm font-medium"
+          className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none text-slate-200 text-sm font-medium cursor-pointer hover:bg-slate-800/50"
           {...props}
         >
           {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
         </select>
-        <div className="absolute right-3 top-2.5 pointer-events-none text-slate-500">
+        <div className="absolute right-3 top-2.5 pointer-events-none text-emerald-500">
           <span className="material-icons-round text-lg">expand_more</span>
         </div>
       </div>
     ) : (
       <input 
         type={type}
-        className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all text-slate-200 placeholder-slate-600 text-sm font-medium"
+        className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-slate-200 placeholder-slate-600 text-sm font-medium"
         {...props}
       />
     )}
@@ -147,19 +130,29 @@ const FormInput = ({ label, type = "text", className = "", options, ...props }: 
 );
 
 const ResultCard = ({ title, value, subtext, highlight = false, onClick }: any) => (
-  <div onClick={onClick} className={`bg-slate-900 p-5 rounded-2xl border ${highlight ? 'border-amber-500/50 ring-2 ring-amber-500/20 shadow-amber-900/20 shadow-xl' : 'border-slate-800 shadow-sm'} ${onClick ? 'cursor-pointer hover:border-amber-500/50 transition-all' : ''}`}>
-    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">{title}</div>
-    <div className={`text-2xl font-black ${highlight ? 'text-amber-500' : 'text-slate-200'} font-mono`}>{value}</div>
+  <div onClick={onClick} className={`bg-slate-900 p-5 rounded-2xl border ${highlight ? 'border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-emerald-900/20 shadow-xl' : 'border-slate-800 shadow-sm'} ${onClick ? 'cursor-pointer hover:border-emerald-500/50 transition-all hover:bg-slate-800/80' : ''}`}>
+    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-2">
+        {title}
+        {onClick && <span className="material-icons-round text-[10px] text-emerald-500">edit</span>}
+    </div>
+    <div className={`text-2xl font-black ${highlight ? 'text-emerald-400' : 'text-slate-200'} font-mono`}>{value}</div>
     {subtext && <div className="text-[10px] text-slate-500 mt-1 font-bold">{subtext}</div>}
   </div>
 );
 
-const LineItem = ({ label, value, subtext, type = 'neutral' }: { label: string, value: number, subtext?: string, type?: 'plus'|'minus'|'neutral' }) => {
+interface LineItemProps {
+  label: string;
+  value: number;
+  subtext?: string;
+  type?: 'plus' | 'minus' | 'neutral';
+}
+
+const LineItem: React.FC<LineItemProps> = ({ label, value, subtext, type = 'neutral' }) => {
     if (Math.abs(value) < 0.01) return null;
     return (
-        <div className="flex justify-between items-center py-3 border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors px-2 rounded-lg">
+        <div className="flex justify-between items-center py-3 border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors px-2 rounded-lg group">
             <div>
-              <div className="text-sm font-bold text-slate-300">{label}</div>
+              <div className="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">{label}</div>
               {subtext && <div className="text-[10px] text-slate-500 font-bold">{subtext}</div>}
             </div>
             <span className={`text-sm font-mono font-black ${type === 'plus' ? 'text-emerald-400' : type === 'minus' ? 'text-rose-500' : 'text-slate-400'}`}>
@@ -226,10 +219,13 @@ function App() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // CORREÇÃO: Atualização de estado imutável para garantir que o React renderize as mudanças nos inputs
   const updateFgtsValue = (index: number, val: number) => {
-    const newData = [...fgtsManualData];
-    newData[index].value = val;
-    setFgtsManualData(newData);
+    setFgtsManualData(prev => {
+        const newData = [...prev];
+        newData[index] = { ...newData[index], value: val };
+        return newData;
+    });
   };
 
   const preencherSalarioMinimo = () => {
@@ -238,7 +234,7 @@ function App() {
         value: Number((getSalarioMinimo(parseDate(item.date + '-01')) * 0.08).toFixed(2))
     }));
     setFgtsManualData(newData);
-    setFgtsSaldoManual('');
+    setFgtsSaldoManual(''); // Limpa o saldo manual para forçar o uso da soma da lista
   };
 
   const addAjuste = (e: React.FormEvent) => {
@@ -412,11 +408,11 @@ function App() {
                       <div className="h-6 w-px bg-slate-800 hidden md:block"></div>
                       <div className="flex flex-wrap items-center gap-6 flex-grow">
                           <label className="flex items-center gap-2 cursor-pointer select-none">
-                              <input type="checkbox" checked={printSignatures} onChange={e => setPrintSignatures(e.target.checked)} className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-800" />
+                              <input type="checkbox" checked={printSignatures} onChange={e => setPrintSignatures(e.target.checked)} className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 border-slate-600 bg-slate-800" />
                               <span className="text-sm font-semibold text-slate-300 whitespace-nowrap">Incluir assinaturas</span>
                           </label>
                           <label className="flex items-center gap-2 cursor-pointer select-none">
-                              <input type="checkbox" checked={shrinkToFit} onChange={e => setShrinkToFit(e.target.checked)} className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-slate-600 bg-slate-800" />
+                              <input type="checkbox" checked={shrinkToFit} onChange={e => setShrinkToFit(e.target.checked)} className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 border-slate-600 bg-slate-800" />
                               <span className="text-sm font-semibold text-slate-300 whitespace-nowrap">Modo Compacto</span>
                           </label>
                           {printSignatures && (
@@ -426,11 +422,11 @@ function App() {
                                 value={signatureText} 
                                 onChange={e => setSignatureText(e.target.value)} 
                                 placeholder="Texto customizado (max 2 linhas)" 
-                                className="flex-grow text-xs px-3 py-2 bg-slate-950 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-amber-500 outline-none min-w-[200px]"
+                                className="flex-grow text-xs px-3 py-2 bg-slate-950 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none min-w-[200px]"
                               />
                           )}
                       </div>
-                      <button onClick={() => window.print()} className="bg-amber-500 hover:bg-amber-600 text-slate-950 px-8 py-2.5 rounded-xl font-black shadow-lg shadow-amber-500/10 flex items-center gap-2 transition-all transform hover:-translate-y-0.5">
+                      <button onClick={() => window.print()} className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 px-8 py-2.5 rounded-xl font-black shadow-lg shadow-emerald-500/10 flex items-center gap-2 transition-all transform hover:-translate-y-0.5">
                           <span className="material-icons-round">print</span> Imprimir
                       </button>
                   </div>
@@ -443,7 +439,7 @@ function App() {
                         <div className="flex justify-between items-end border-b-2 border-slate-800 pb-2 mb-4">
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className="material-icons-round text-3xl text-slate-900">account_balance</span>
+                                    <span className="material-icons-round text-3xl text-emerald-600">account_balance_wallet</span>
                                     <h1 className="text-xl font-black uppercase tracking-tight text-slate-900">Vírgula Contábil</h1>
                                 </div>
                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Demonstrativo de Rescisão ({calculo.isPedidoDemissao ? 'Pedido de Demissão' : 'Dispensa sem Justa Causa'})</p>
@@ -464,7 +460,7 @@ function App() {
 
                         {/* Texto Customizado acima da tabela */}
                         {printSignatures && signatureText && (
-                            <div className="mb-4 text-xs italic text-slate-600 bg-slate-50 p-2 border-l-4 border-amber-400 leading-relaxed whitespace-pre-line">
+                            <div className="mb-4 text-xs italic text-slate-600 bg-slate-50 p-2 border-l-4 border-emerald-400 leading-relaxed whitespace-pre-line">
                                 {signatureText}
                             </div>
                         )}
@@ -584,12 +580,12 @@ function App() {
     <div className="min-h-screen bg-[#020617] font-sans text-slate-300">
       <div className="max-w-6xl mx-auto p-4 md:p-8 no-print">
         <header className="mb-8 flex items-center gap-3">
-            <div className="bg-slate-900 p-2.5 rounded-lg border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
-                <span className="material-icons-round text-amber-500 text-xl block">account_balance_wallet</span>
+            <div className="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                <span className="material-icons-round text-emerald-500 text-xl block">account_balance_wallet</span>
             </div>
             <div>
                 <h1 className="text-xl font-black text-white">Vírgula Contábil</h1>
-                <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] mt-0.5">Premium Edition</p>
+                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mt-0.5">Premium Edition</p>
             </div>
         </header>
 
@@ -598,8 +594,8 @@ function App() {
                 <div className="mb-5">
                     <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">Motivo da Rescisão</label>
                     <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
-                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-2 text-xs font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'dispensa' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Demitido</button>
-                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-2 text-xs font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'pedido' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
+                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-2 text-xs font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'dispensa' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Demitido</button>
+                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-2 text-xs font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'pedido' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
                     </div>
                 </div>
                 <FormInput label="Salário Base (R$)" name="salarioBase" type="number" value={formData.salarioBase} onChange={handleInputChange} />
@@ -612,7 +608,7 @@ function App() {
                 
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
 
-                <button onClick={handleCalcular} className="w-full mt-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg shadow-amber-900/20 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-lg">play_arrow</span> Calcular Rescisão</button>
+                <button onClick={handleCalcular} className="w-full mt-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-lg">play_arrow</span> Calcular Rescisão</button>
             </div>
 
             <div className="w-full lg:w-2/3">
@@ -628,19 +624,19 @@ function App() {
                             <ResultCard title="Líquido a Receber" value={formatCurrency(calculo.rescisaoLiquida)} subtext="Disponível em conta" />
                         </div>
                         <div className="bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden relative">
-                             <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-[80px] rounded-full"></div>
+                             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[80px] rounded-full"></div>
                              <div className="px-5 py-4 flex justify-between items-center border-b border-slate-800/50 bg-slate-950/30">
                                 <div className="flex items-center gap-2">
-                                    <span className="material-icons-round text-amber-500 text-lg">savings</span>
+                                    <span className="material-icons-round text-emerald-500 text-lg">savings</span>
                                     <span className="text-xs font-black text-slate-300 uppercase tracking-wide">FGTS + Multa 40%</span>
                                 </div>
-                                <button onClick={() => setShowFGTSModal(true)} className="text-[9px] font-black text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded uppercase tracking-wider transition-colors border border-amber-500/20">Editar Saldo</button>
+                                <button onClick={() => setShowFGTSModal(true)} className="text-[9px] font-black text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded uppercase tracking-wider transition-colors border border-emerald-500/20">Editar Saldo</button>
                              </div>
                              {calculo.isPedidoDemissao ? <div className="p-6 text-sm text-slate-500 italic text-center bg-slate-950/20">Sem saque de FGTS para pedidos de demissão.</div> : (
                                 <div className="p-5 space-y-3 relative z-10">
                                     <div className="flex justify-between items-center text-sm"><div><div className="text-slate-400 font-bold text-xs uppercase">Saldo Fins Rescisórios</div><div className="text-[10px] text-slate-600 font-bold">Base para multa</div></div><div className="font-mono font-bold text-slate-300">{formatCurrency(calculo.saldoFGTSBase + calculo.fgtsRescisao + calculo.fgtsAvisoIndenizado)}</div></div>
-                                    <div className="flex justify-between items-center text-sm border-b border-slate-800 pb-3"><div className="text-slate-400 font-bold text-xs uppercase">Multa 40%</div><div className="font-mono font-bold text-amber-500">{formatCurrency(calculo.multa40)}</div></div>
-                                    <div className="flex justify-between items-center pt-1"><div className="text-slate-200 font-black text-sm uppercase tracking-wide">Total Saque FGTS</div><div className="font-mono font-black text-amber-400 text-lg">{formatCurrency(calculo.totalContaFGTS)}</div></div>
+                                    <div className="flex justify-between items-center text-sm border-b border-slate-800 pb-3"><div className="text-slate-400 font-bold text-xs uppercase">Multa 40%</div><div className="font-mono font-bold text-emerald-500">{formatCurrency(calculo.multa40)}</div></div>
+                                    <div className="flex justify-between items-center pt-1"><div className="text-slate-200 font-black text-sm uppercase tracking-wide">Total Saque FGTS</div><div className="font-mono font-black text-emerald-400 text-lg">{formatCurrency(calculo.totalContaFGTS)}</div></div>
                                 </div>
                              )}
                         </div>
@@ -683,7 +679,7 @@ function App() {
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-center border-t border-slate-800 mt-6">
                              <button onClick={() => setShowAdjustModal(true)} className="text-slate-300 bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 transition-all"><span className="material-icons-round text-lg">post_add</span> Lançamento Manual</button>
-                             <button onClick={togglePrintPreview} className="text-slate-950 bg-amber-500 hover:bg-amber-400 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-900/20"><span className="material-icons-round text-lg">description</span> Gerar PDF / Imprimir</button>
+                             <button onClick={togglePrintPreview} className="text-slate-950 bg-emerald-500 hover:bg-emerald-400 px-8 py-3 rounded-xl font-black text-xs uppercase tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-900/20"><span className="material-icons-round text-lg">description</span> Gerar PDF / Imprimir</button>
                         </div>
                     </div>
                 )}
@@ -701,13 +697,13 @@ function App() {
                 </div>
                 <div className="p-6 overflow-y-auto custom-scrollbar bg-slate-900">
                     <div className="mb-6 bg-slate-950 p-5 rounded-2xl border border-slate-800">
-                        <label className="block text-xs font-black text-amber-500 mb-2 uppercase tracking-wide">Saldo Atual Disponível (Extrato)</label>
-                        <input type="number" className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-600 text-sm font-mono" placeholder="0.00" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(Number(e.target.value))} />
+                        <label className="block text-xs font-black text-emerald-500 mb-2 uppercase tracking-wide">Saldo Atual Disponível (Extrato)</label>
+                        <input type="number" className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white placeholder-slate-600 text-sm font-mono" placeholder="0.00" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(Number(e.target.value))} />
                     </div>
-                    <div className="flex justify-between items-end mb-4"><h4 className="font-bold text-slate-400 text-xs uppercase tracking-wide">Lançamentos Mensais (8%)</h4><button onClick={preencherSalarioMinimo} className="text-[10px] font-bold text-amber-500 hover:bg-amber-500/10 px-3 py-1.5 rounded transition-colors uppercase border border-amber-500/20">Preencher c/ Mínimo</button></div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">{fgtsManualData.map((item, idx) => (<div key={idx} className="bg-slate-950 p-2 rounded-xl border border-slate-800"><label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">{item.date}</label><input type="number" className="w-full px-2 py-1 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white text-center focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all font-mono" value={item.value} onChange={(e) => updateFgtsValue(idx, Number(e.target.value))} /></div>))}</div>
+                    <div className="flex justify-between items-end mb-4"><h4 className="font-bold text-slate-400 text-xs uppercase tracking-wide">Lançamentos Mensais (8%)</h4><button onClick={preencherSalarioMinimo} className="text-[10px] font-bold text-emerald-500 hover:bg-emerald-500/10 px-3 py-1.5 rounded transition-colors uppercase border border-emerald-500/20">Preencher c/ Mínimo</button></div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">{fgtsManualData.map((item, idx) => (<div key={idx} className="bg-slate-950 p-2 rounded-xl border border-slate-800"><label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">{item.date}</label><input type="number" className="w-full px-2 py-1 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white text-center focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all font-mono" value={item.value} onChange={(e) => updateFgtsValue(idx, Number(e.target.value))} /></div>))}</div>
                 </div>
-                <div className="p-5 border-t border-slate-800 bg-slate-900 flex justify-end gap-3 z-10"><button onClick={() => setShowFGTSModal(false)} className="px-5 py-2.5 text-slate-500 font-bold hover:text-white transition-colors text-xs uppercase tracking-wide">Cancelar</button><button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-6 py-2.5 bg-amber-500 text-slate-950 rounded-xl hover:bg-amber-400 font-black shadow-lg shadow-amber-900/20 text-xs uppercase tracking-wide transition-all">Salvar Dados</button></div>
+                <div className="p-5 border-t border-slate-800 bg-slate-900 flex justify-end gap-3 z-10"><button onClick={() => setShowFGTSModal(false)} className="px-5 py-2.5 text-slate-500 font-bold hover:text-white transition-colors text-xs uppercase tracking-wide">Cancelar</button><button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-6 py-2.5 bg-emerald-500 text-slate-950 rounded-xl hover:bg-emerald-400 font-black shadow-lg shadow-emerald-900/20 text-xs uppercase tracking-wide transition-all">Salvar Dados</button></div>
             </div>
         </div>
       )}
@@ -718,10 +714,10 @@ function App() {
             <div className="bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-slide-up border border-slate-800">
                 <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50"><h3 className="text-sm font-black text-white uppercase tracking-wide">Lançamento Manual</h3><button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white transition-colors"><span className="material-icons-round">close</span></button></div>
                 <form onSubmit={addAjuste} className="p-6 space-y-4">
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white text-sm" placeholder="Ex: Horas Extras..." /></div>
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Valor (R$)</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white text-sm font-mono" placeholder="0.00" /></div>
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white text-sm font-medium"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
-                    <button type="submit" className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 py-3 rounded-xl font-black mt-2 shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest">Adicionar Item</button>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm" placeholder="Ex: Horas Extras..." /></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Valor (R$)</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-mono" placeholder="0.00" /></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-medium"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
+                    <button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3 rounded-xl font-black mt-2 shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest">Adicionar Item</button>
                 </form>
                 <div className="px-6 pb-6">
                     <h4 className="font-bold text-[9px] uppercase text-slate-600 mb-3 tracking-widest">Itens Adicionados</h4>
