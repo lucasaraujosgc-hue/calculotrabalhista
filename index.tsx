@@ -56,21 +56,35 @@ const getSalarioMinimo = (date: Date): number => {
 
 const calcularINSS = (baseCalculo: number) => {
   if (baseCalculo <= 0) return 0;
-  const base = Math.min(baseCalculo, 8157.41); 
+  
+  // Teto INSS 2026 baseado na Faixa 4 da imagem
+  const teto = 8475.55;
+  const base = Math.min(baseCalculo, teto); 
+  
   let desconto = 0;
-  const faixa1 = 1621.00; 
-  const faixa2 = 2793.88; 
-  const faixa3 = 4190.83; 
-  if (base <= faixa1) desconto = base * 0.075;
-  else if (base <= faixa2) desconto = (faixa1 * 0.075) + ((base - faixa1) * 0.09);
-  else if (base <= faixa3) desconto = (faixa1 * 0.075) + ((faixa2 - faixa1) * 0.09) + ((base - faixa2) * 0.12);
-  else desconto = (faixa1 * 0.075) + ((faixa2 - faixa1) * 0.09) + ((faixa3 - faixa2) * 0.12) + ((base - faixa3) * 0.14);
+  
+  // Faixas conforme imagem do usuário
+  const f1 = 1621.00; 
+  const f2 = 2902.84; 
+  const f3 = 4354.27; 
+
+  if (base <= f1) {
+    desconto = base * 0.075;
+  } else if (base <= f2) {
+    desconto = (f1 * 0.075) + ((base - f1) * 0.09);
+  } else if (base <= f3) {
+    desconto = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((base - f2) * 0.12);
+  } else {
+    desconto = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((f3 - f2) * 0.12) + ((base - f3) * 0.14);
+  }
+  
   return Math.round(desconto * 100) / 100;
 };
 
 const calcularIRRF = (baseCalculo: number) => {
   if (baseCalculo <= 0) return 0;
   let imposto = 0;
+  // Faixas de IRRF 2025/2026 (base simplificada)
   if (baseCalculo <= 2259.20) imposto = 0;
   else if (baseCalculo <= 2826.65) imposto = (baseCalculo * 0.075) - 169.44;
   else if (baseCalculo <= 3751.05) imposto = (baseCalculo * 0.15) - 381.44;
