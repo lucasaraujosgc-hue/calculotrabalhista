@@ -608,7 +608,10 @@ function App() {
                 
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
 
-                <button onClick={handleCalcular} className="w-full mt-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-lg">play_arrow</span> Calcular Rescisão</button>
+                <div className="space-y-3 mt-4">
+                    <button onClick={handleCalcular} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-lg">play_arrow</span> Calcular Rescisão</button>
+                    <button onClick={() => setShowFGTSModal(true)} className="w-full bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-3 rounded-xl border border-slate-700 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest"><span className="material-icons-round text-base">savings</span> Ajustar FGTS</button>
+                </div>
             </div>
 
             <div className="w-full lg:w-2/3">
@@ -689,7 +692,7 @@ function App() {
 
       {/* MODAL FGTS */}
       {showFGTSModal && (
-        <div className="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-fade-in no-print">
+        <div className="fixed inset-0 bg-slate-950/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md animate-fade-in no-print">
             <div className="bg-slate-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-slide-up border border-slate-800">
                 <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
                     <h3 className="text-sm font-black text-white uppercase tracking-wide">Ajuste de FGTS</h3>
