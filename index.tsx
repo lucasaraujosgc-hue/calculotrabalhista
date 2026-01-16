@@ -105,24 +105,24 @@ const calcularIRRF = (baseCalculo: number) => {
 // --- COMPONENTES VISUAIS (TEMA DARK/GREEN) ---
 
 const FormInput = ({ label, type = "text", className = "", options, ...props }: any) => (
-  <div className={`mb-4 ${className}`}>
-    <label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wide">{label}</label>
+  <div className={`mb-3 ${className}`}>
+    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">{label}</label>
     {options ? (
       <div className="relative">
         <select 
-          className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none text-slate-200 text-sm font-medium cursor-pointer hover:bg-slate-800/50"
+          className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none text-slate-200 text-sm font-medium cursor-pointer hover:bg-slate-800/50"
           {...props}
         >
           {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
         </select>
-        <div className="absolute right-3 top-2.5 pointer-events-none text-emerald-500">
-          <span className="material-icons-round text-lg">expand_more</span>
+        <div className="absolute right-3 top-2 pointer-events-none text-emerald-500">
+          <span className="material-icons-round text-base">expand_more</span>
         </div>
       </div>
     ) : (
       <input 
         type={type}
-        className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-slate-200 placeholder-slate-600 text-sm font-medium"
+        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-slate-200 placeholder-slate-600 text-sm font-medium"
         {...props}
       />
     )}
@@ -150,7 +150,7 @@ interface LineItemProps {
 const LineItem: React.FC<LineItemProps> = ({ label, value, subtext, type = 'neutral' }) => {
     if (Math.abs(value) < 0.01) return null;
     return (
-        <div className="flex justify-between items-center py-3 border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors px-2 rounded-lg group">
+        <div className="flex justify-between items-center py-2.5 border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors px-2 rounded-lg group">
             <div>
               <div className="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">{label}</div>
               {subtext && <div className="text-[10px] text-slate-500 font-bold">{subtext}</div>}
@@ -219,7 +219,6 @@ function App() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // CORREÇÃO: Atualização de estado imutável para garantir que o React renderize as mudanças nos inputs
   const updateFgtsValue = (index: number, val: number) => {
     setFgtsManualData(prev => {
         const newData = [...prev];
@@ -234,7 +233,7 @@ function App() {
         value: Number((getSalarioMinimo(parseDate(item.date + '-01')) * 0.08).toFixed(2))
     }));
     setFgtsManualData(newData);
-    setFgtsSaldoManual(''); // Limpa o saldo manual para forçar o uso da soma da lista
+    setFgtsSaldoManual(''); 
   };
 
   const addAjuste = (e: React.FormEvent) => {
@@ -432,7 +431,7 @@ function App() {
                   </div>
               </div>
 
-              {/* AREA DE IMPRESSAO (Mantém fundo branco para imprimir) */}
+              {/* AREA DE IMPRESSAO */}
               <div id="print-area-container" className={`bg-white w-full max-w-[210mm] min-h-[297mm] p-10 shadow-2xl mx-auto relative text-sm text-slate-900 flex flex-col justify-between print:shadow-none print:p-8 print:m-0 print:w-full print:h-full ${shrinkToFit ? 'print-shrink' : ''}`}>
                     <div className="print-content-wrapper">
                         {/* Header Demonstrativo */}
@@ -579,23 +578,25 @@ function App() {
   return (
     <div className="min-h-screen bg-[#020617] font-sans text-slate-300">
       <div className="max-w-6xl mx-auto p-4 md:p-8 no-print">
-        <header className="mb-8 flex items-center gap-3">
-            <div className="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                <span className="material-icons-round text-emerald-500 text-xl block">account_balance_wallet</span>
-            </div>
-            <div>
-                <h1 className="text-xl font-black text-white">Vírgula Contábil</h1>
-                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mt-0.5">Premium Edition</p>
-            </div>
+        <header className="mb-8">
+            <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }} className="flex items-center space-x-4 cursor-pointer group no-underline">
+                <div className="w-12 h-12 bg-slate-900 rounded-xl border border-white/10 flex items-center justify-center text-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-transform group-hover:scale-105">
+                    <span className="material-icons-round text-3xl">calculate</span>
+                </div>
+                <div className="flex flex-col justify-center">
+                    <span className="text-3xl font-bold text-white tracking-tight leading-none mb-0.5">Vírgula</span>
+                    <span className="text-base font-semibold text-emerald-500 tracking-widest leading-none uppercase">Contábil</span>
+                </div>
+            </a>
         </header>
 
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-            <div className="w-full lg:w-1/3 bg-slate-900/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-slate-800 h-fit sticky top-6">
-                <div className="mb-5">
-                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">Motivo da Rescisão</label>
+            <div className="w-full lg:w-1/3 bg-slate-900/50 backdrop-blur-sm p-5 rounded-2xl shadow-xl border border-slate-800 h-fit sticky top-6">
+                <div className="mb-4">
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wide">Motivo da Rescisão</label>
                     <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
-                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-2 text-xs font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'dispensa' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Demitido</button>
-                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-2 text-xs font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'pedido' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
+                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'dispensa' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Demitido</button>
+                        <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'pedido' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
                     </div>
                 </div>
                 <FormInput label="Salário Base (R$)" name="salarioBase" type="number" value={formData.salarioBase} onChange={handleInputChange} />
@@ -608,9 +609,9 @@ function App() {
                 
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
 
-                <div className="space-y-3 mt-4">
-                    <button onClick={handleCalcular} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-lg">play_arrow</span> Calcular Rescisão</button>
-                    <button onClick={() => setShowFGTSModal(true)} className="w-full bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-3 rounded-xl border border-slate-700 transition-all flex justify-center items-center gap-2 text-xs uppercase tracking-widest"><span className="material-icons-round text-base">savings</span> Ajustar FGTS</button>
+                <div className="space-y-2.5 mt-4">
+                    <button onClick={handleCalcular} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-[11px] uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-lg">play_arrow</span> Calcular Rescisão</button>
+                    <button onClick={() => setShowFGTSModal(true)} className="w-full bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-2.5 rounded-xl border border-slate-700 transition-all flex justify-center items-center gap-2 text-[10px] uppercase tracking-widest"><span className="material-icons-round text-base">savings</span> Ajustar FGTS</button>
                 </div>
             </div>
 
@@ -690,13 +691,13 @@ function App() {
         </div>
       </div>
 
-      {/* MODAL FGTS */}
+      {/* MODAL FGTS - CORREÇÃO DE ABERTURA E Z-INDEX */}
       {showFGTSModal && (
-        <div className="fixed inset-0 bg-slate-950/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md animate-fade-in no-print">
+        <div className="fixed inset-0 bg-slate-950/90 z-[9999] flex items-center justify-center p-4 backdrop-blur-md animate-fade-in no-print">
             <div className="bg-slate-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-slide-up border border-slate-800">
                 <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
                     <h3 className="text-sm font-black text-white uppercase tracking-wide">Ajuste de FGTS</h3>
-                    <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white transition-colors"><span className="material-icons-round">close</span></button>
+                    <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white transition-colors p-1"><span className="material-icons-round">close</span></button>
                 </div>
                 <div className="p-6 overflow-y-auto custom-scrollbar bg-slate-900">
                     <div className="mb-6 bg-slate-950 p-5 rounded-2xl border border-slate-800">
@@ -713,13 +714,13 @@ function App() {
 
       {/* MODAL AJUSTES */}
       {showAdjustModal && (
-        <div className="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 backdrop-blur-md no-print">
+        <div className="fixed inset-0 bg-slate-950/80 z-[9998] flex items-center justify-center p-4 backdrop-blur-md no-print">
             <div className="bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-slide-up border border-slate-800">
-                <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50"><h3 className="text-sm font-black text-white uppercase tracking-wide">Lançamento Manual</h3><button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white transition-colors"><span className="material-icons-round">close</span></button></div>
+                <div className="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/50"><h3 className="text-sm font-black text-white uppercase tracking-wide">Lançamento Manual</h3><button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white transition-colors p-1"><span className="material-icons-round">close</span></button></div>
                 <form onSubmit={addAjuste} className="p-6 space-y-4">
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm" placeholder="Ex: Horas Extras..." /></div>
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Valor (R$)</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-mono" placeholder="0.00" /></div>
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-3 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-medium"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-3 py-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm" placeholder="Ex: Horas Extras..." /></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Valor (R$)</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-3 py-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-mono" placeholder="0.00" /></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1.5 uppercase">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-3 py-2.5 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-sm font-medium"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
                     <button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3 rounded-xl font-black mt-2 shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest">Adicionar Item</button>
                 </form>
                 <div className="px-6 pb-6">
