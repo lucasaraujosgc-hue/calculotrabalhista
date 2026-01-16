@@ -105,24 +105,24 @@ const calcularIRRF = (baseCalculo: number) => {
 // --- COMPONENTES VISUAIS (TEMA DARK/GREEN) ---
 
 const FormInput = ({ label, type = "text", className = "", options, ...props }: any) => (
-  <div className={`mb-2 ${className}`}>
-    <label className="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase tracking-wider">{label}</label>
+  <div className={`mb-3 ${className}`}>
+    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wider">{label}</label>
     {options ? (
       <div className="relative">
         <select 
-          className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none text-slate-200 text-xs font-medium cursor-pointer hover:bg-slate-800/50"
+          className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none text-slate-200 text-xs font-medium cursor-pointer hover:bg-slate-800/50"
           {...props}
         >
           {options.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
         </select>
-        <div className="absolute right-2 top-1.5 pointer-events-none text-emerald-500">
+        <div className="absolute right-2 top-2 pointer-events-none text-emerald-500">
           <span className="material-icons-round text-sm">expand_more</span>
         </div>
       </div>
     ) : (
       <input 
         type={type}
-        className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-slate-200 placeholder-slate-600 text-xs font-medium"
+        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-slate-200 placeholder-slate-600 text-xs font-medium"
         {...props}
       />
     )}
@@ -604,7 +604,7 @@ function App() {
         <div className="flex flex-col lg:flex-row gap-6 items-start">
             <div className="w-full lg:w-1/3 bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-slate-800 h-fit sticky top-4">
                 <div className="mb-3">
-                    <label className="block text-[9px] font-bold text-slate-400 mb-1 uppercase tracking-wide">Motivo da Rescisão</label>
+                    <label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-wide">Motivo da Rescisão</label>
                     <div className="flex bg-slate-950 p-0.5 rounded-lg border border-slate-800">
                         <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'dispensa' }))} className={`flex-1 py-1 text-[9px] font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'dispensa' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Demitido</button>
                         <button onClick={() => setFormData(prev => ({ ...prev, motivo: 'pedido' }))} className={`flex-1 py-1 text-[9px] font-bold rounded-md transition-all uppercase tracking-wide ${formData.motivo === 'pedido' ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-900/20' : 'text-slate-500 hover:text-slate-300'}`}>Pedido</button>
@@ -620,7 +620,7 @@ function App() {
                 
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
 
-                <div className="mt-3">
+                <div className="mt-4">
                     <button onClick={handleCalcular} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-[10px] uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-base">play_arrow</span> Calcular Rescisão</button>
                 </div>
             </div>
@@ -639,14 +639,14 @@ function App() {
                         </div>
                         <div className="bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden relative">
                              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[80px] rounded-full"></div>
-                             <div className="px-5 py-3.5 flex justify-between items-center border-b border-slate-800/50 bg-slate-950/30">
+                             <div className="px-5 py-3.5 flex justify-between items-center border-b border-slate-800/50 bg-slate-950/30 relative z-10">
                                 <div className="flex items-center gap-2">
                                     <span className="material-icons-round text-emerald-500 text-base">savings</span>
                                     <span className="text-[10px] font-black text-slate-300 uppercase tracking-wide">FGTS + Multa 40%</span>
                                 </div>
-                                <button onClick={() => setShowFGTSModal(true)} className="text-[8px] font-black text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 rounded uppercase tracking-wider transition-colors border border-emerald-500/20">Editar Saldo</button>
+                                <button onClick={() => setShowFGTSModal(true)} className="text-[8px] font-black text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1.5 rounded uppercase tracking-wider transition-colors border border-emerald-500/20 cursor-pointer relative">Editar Saldo</button>
                              </div>
-                             {calculo.isPedidoDemissao ? <div className="p-5 text-xs text-slate-500 italic text-center bg-slate-950/20">Sem saque de FGTS para pedidos de demissão.</div> : (
+                             {calculo.isPedidoDemissao ? <div className="p-5 text-xs text-slate-500 italic text-center bg-slate-950/20 relative z-10">Sem saque de FGTS para pedidos de demissão.</div> : (
                                 <div className="p-4 space-y-2 relative z-10">
                                     <div className="flex justify-between items-center text-xs"><div><div className="text-slate-400 font-bold text-[10px] uppercase">Saldo Fins Rescisórios</div><div className="text-[9px] text-slate-600 font-bold">Base para multa</div></div><div className="font-mono font-bold text-slate-300">{formatCurrency(calculo.saldoFGTSBase + calculo.fgtsRescisao + calculo.fgtsAvisoIndenizado)}</div></div>
                                     <div className="flex justify-between items-center text-xs border-b border-slate-800 pb-2"><div className="text-slate-400 font-bold text-[10px] uppercase">Multa 40%</div><div className="font-mono font-bold text-emerald-500">{formatCurrency(calculo.multa40)}</div></div>
@@ -658,7 +658,7 @@ function App() {
                             <div className="bg-slate-900 rounded-xl border border-slate-800 shadow-lg flex flex-col h-full">
                                 <div className="px-5 py-2.5 flex justify-between items-center border-b border-slate-800 bg-slate-950/30">
                                     <div className="flex items-center gap-2"><span className="material-icons-round text-emerald-500 text-xs">add_circle</span><span className="text-[9px] font-black text-emerald-500 uppercase tracking-wide">Proventos</span></div>
-                                    <button onClick={() => setShowAdjustModal(true)} className="text-[8px] font-bold text-slate-500 hover:text-white uppercase tracking-wide transition-colors">Adicionar</button>
+                                    <button onClick={() => setShowAdjustModal(true)} className="text-[8px] font-bold text-slate-500 hover:text-white uppercase tracking-wide transition-colors cursor-pointer">Adicionar</button>
                                 </div>
                                 <div className="p-1.5 flex-grow">
                                     <LineItem label="Saldo de Salário" value={calculo.saldoSalario} subtext={`${calculo.diasTrabalhados} dias`} type="plus" />
@@ -692,8 +692,8 @@ function App() {
                             </div>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3 pt-4 justify-center border-t border-slate-800 mt-4">
-                             <button onClick={() => setShowAdjustModal(true)} className="text-slate-300 bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:text-white px-5 py-2.5 rounded-xl font-bold text-[9px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all"><span className="material-icons-round text-base">post_add</span> Lançamento Manual</button>
-                             <button onClick={togglePrintPreview} className="text-slate-950 bg-emerald-500 hover:bg-emerald-400 px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-900/20"><span className="material-icons-round text-base">description</span> Gerar PDF / Imprimir</button>
+                             <button onClick={() => setShowAdjustModal(true)} className="text-slate-300 bg-slate-900 border border-slate-700 hover:bg-slate-800 hover:text-white px-5 py-2.5 rounded-xl font-bold text-[9px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all cursor-pointer"><span className="material-icons-round text-base">post_add</span> Lançamento Manual</button>
+                             <button onClick={togglePrintPreview} className="text-slate-950 bg-emerald-500 hover:bg-emerald-400 px-6 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-900/20 cursor-pointer"><span className="material-icons-round text-base">description</span> Gerar PDF / Imprimir</button>
                         </div>
                     </div>
                 )}
@@ -707,17 +707,17 @@ function App() {
             <div className="bg-slate-900 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-slide-up border border-slate-800">
                 <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
                     <h3 className="text-xs font-black text-white uppercase tracking-wide">Ajuste de FGTS</h3>
-                    <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white transition-colors p-1"><span className="material-icons-round">close</span></button>
+                    <button onClick={() => setShowFGTSModal(false)} className="text-slate-500 hover:text-white transition-colors p-1 cursor-pointer"><span className="material-icons-round">close</span></button>
                 </div>
                 <div className="p-5 overflow-y-auto custom-scrollbar bg-slate-900">
                     <div className="mb-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
                         <label className="block text-[10px] font-black text-emerald-500 mb-1.5 uppercase tracking-wide">Saldo Atual Disponível (Extrato)</label>
                         <input type="number" className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white placeholder-slate-600 text-xs font-mono" placeholder="0.00" value={fgtsSaldoManual} onChange={(e) => setFgtsSaldoManual(Number(e.target.value))} />
                     </div>
-                    <div className="flex justify-between items-end mb-3"><h4 className="font-bold text-slate-400 text-[10px] uppercase tracking-wide">Lançamentos Mensais (8%)</h4><button onClick={preencherSalarioMinimo} className="text-[9px] font-bold text-emerald-500 hover:bg-emerald-500/10 px-2.5 py-1 rounded transition-colors uppercase border border-emerald-500/20">Preencher c/ Mínimo</button></div>
+                    <div className="flex justify-between items-end mb-3"><h4 className="font-bold text-slate-400 text-[10px] uppercase tracking-wide">Lançamentos Mensais (8%)</h4><button onClick={preencherSalarioMinimo} className="text-[9px] font-bold text-emerald-500 hover:bg-emerald-500/10 px-2.5 py-1 rounded transition-colors uppercase border border-emerald-500/20 cursor-pointer">Preencher c/ Mínimo</button></div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">{fgtsManualData.map((item, idx) => (<div key={idx} className="bg-slate-950 p-1.5 rounded-xl border border-slate-800"><label className="block text-[9px] font-bold text-slate-500 mb-0.5 uppercase text-center">{item.date}</label><input type="number" className="w-full px-1.5 py-1 bg-slate-900 border border-slate-700 rounded-lg text-[10px] text-white text-center focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all font-mono" value={item.value} onChange={(e) => updateFgtsValue(idx, Number(e.target.value))} /></div>))}</div>
                 </div>
-                <div className="p-4 border-t border-slate-800 bg-slate-900 flex justify-end gap-2.5 z-10"><button onClick={() => setShowFGTSModal(false)} className="px-4 py-2 text-slate-500 font-bold hover:text-white transition-colors text-[10px] uppercase tracking-wide">Cancelar</button><button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-5 py-2 bg-emerald-500 text-slate-950 rounded-xl hover:bg-emerald-400 font-black shadow-lg shadow-emerald-900/20 text-[10px] uppercase tracking-wide transition-all">Salvar Dados</button></div>
+                <div className="p-4 border-t border-slate-800 bg-slate-900 flex justify-end gap-2.5 z-10"><button onClick={() => setShowFGTSModal(false)} className="px-4 py-2 text-slate-500 font-bold hover:text-white transition-colors text-[10px] uppercase tracking-wide cursor-pointer">Cancelar</button><button onClick={() => { handleCalcular(); setShowFGTSModal(false); }} className="px-5 py-2 bg-emerald-500 text-slate-950 rounded-xl hover:bg-emerald-400 font-black shadow-lg shadow-emerald-900/20 text-[10px] uppercase tracking-wide transition-all cursor-pointer">Salvar Dados</button></div>
             </div>
         </div>
       )}
@@ -726,21 +726,21 @@ function App() {
       {showAdjustModal && (
         <div className="fixed inset-0 bg-slate-950/80 z-[9998] flex items-center justify-center p-4 backdrop-blur-md no-print">
             <div className="bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-slide-up border border-slate-800">
-                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/50"><h3 className="text-xs font-black text-white uppercase tracking-wide">Lançamento Manual</h3><button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white transition-colors p-1"><span className="material-icons-round">close</span></button></div>
+                <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/50"><h3 className="text-xs font-black text-white uppercase tracking-wide">Lançamento Manual</h3><button onClick={() => setShowAdjustModal(false)} className="text-slate-500 hover:text-white transition-colors p-1 cursor-pointer"><span className="material-icons-round">close</span></button></div>
                 <form onSubmit={addAjuste} className="p-5 space-y-3">
                     <div><label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Descrição</label><input name="descAjuste" required className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-xs" placeholder="Ex: Horas Extras..." /></div>
                     <div><label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Valor (R$)</label><input name="valAjuste" type="number" step="0.01" required className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-xs font-mono" placeholder="0.00" /></div>
                     <div><label className="block text-[10px] font-bold text-slate-400 mb-1 uppercase">Tipo</label><select name="tipoAjuste" className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-white text-xs font-medium"><option value="Provento">Provento (+)</option><option value="Desconto">Desconto (-)</option></select></div>
-                    <button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-2.5 rounded-xl font-black mt-1 shadow-lg flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest">Adicionar Item</button>
+                    <button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-2.5 rounded-xl font-black mt-1 shadow-lg flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest cursor-pointer">Adicionar Item</button>
                 </form>
                 <div className="px-5 pb-5">
                     <h4 className="font-bold text-[8px] uppercase text-slate-600 mb-2 tracking-widest">Itens Adicionados</h4>
                     {ajustes.length === 0 ? <div className="text-[10px] text-slate-600 italic text-center py-3 bg-slate-950 rounded-xl border border-dashed border-slate-800">Nenhum ajuste manual.</div> : (
                         <ul className="space-y-1.5 max-h-32 overflow-y-auto pr-1 custom-scrollbar">
-                            {ajustes.map((aj, i) => (<li key={i} className="flex justify-between items-center text-[10px] bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span className="font-bold text-slate-300 uppercase tracking-tight">{aj.descricao}</span><div className="flex items-center gap-2.5"><span className={`font-black font-mono ${aj.tipo === 'Provento' ? 'text-emerald-500' : 'text-rose-500'}`}>{aj.tipo === 'Provento' ? '+' : '-'} {formatCurrency(aj.valor)}</span><button onClick={() => setAjustes(ajustes.filter((_, idx) => idx !== i))} className="text-slate-600 hover:text-rose-500"><span className="material-icons-round text-sm">delete</span></button></div></li>))}
+                            {ajustes.map((aj, i) => (<li key={i} className="flex justify-between items-center text-[10px] bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span className="font-bold text-slate-300 uppercase tracking-tight">{aj.descricao}</span><div className="flex items-center gap-2.5"><span className={`font-black font-mono ${aj.tipo === 'Provento' ? 'text-emerald-500' : 'text-rose-500'}`}>{aj.tipo === 'Provento' ? '+' : '-'} {formatCurrency(aj.valor)}</span><button onClick={() => setAjustes(ajustes.filter((_, idx) => idx !== i))} className="text-slate-600 hover:text-rose-500 cursor-pointer"><span className="material-icons-round text-sm">delete</span></button></div></li>))}
                         </ul>
                     )}
-                    <div className="mt-4 pt-3 border-t border-slate-800"><button onClick={() => { handleCalcular(); setShowAdjustModal(false); }} className="w-full py-2 bg-slate-800 text-slate-400 rounded-xl hover:text-white font-black text-[9px] uppercase tracking-widest transition-colors">Fechar Painel</button></div>
+                    <div className="mt-4 pt-3 border-t border-slate-800"><button onClick={() => { handleCalcular(); setShowAdjustModal(false); }} className="w-full py-2 bg-slate-800 text-slate-400 rounded-xl hover:text-white font-black text-[9px] uppercase tracking-widest transition-colors cursor-pointer">Fechar Painel</button></div>
                 </div>
             </div>
         </div>
