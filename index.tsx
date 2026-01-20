@@ -496,6 +496,10 @@ function App() {
 
                                 <tr className="border-b border-slate-100"><td className="py-2 px-3">Férias Proporcionais</td><td className="py-2 px-3 text-center text-slate-400">{calculo.avosFerias}/12</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valorFeriasProp)}</td><td className="py-2 px-3"></td></tr>
                                 <tr className="border-b border-slate-100"><td className="py-2 px-3">1/3 Férias Proporcionais</td><td className="py-2 px-3 text-center text-slate-400">1/3</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.tercoFeriasProp)}</td><td className="py-2 px-3"></td></tr>
+                                
+                                {calculo.valorFeriasIndenizado > 0 && <tr className="border-b border-slate-100"><td className="py-2 px-3">Férias s/ Aviso Indenizado</td><td className="py-2 px-3 text-center text-slate-400">-</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.valorFeriasIndenizado)}</td><td className="py-2 px-3"></td></tr>}
+                                {calculo.tercoFeriasIndenizado > 0 && <tr className="border-b border-slate-100"><td className="py-2 px-3">1/3 Férias s/ Aviso Indenizado</td><td className="py-2 px-3 text-center text-slate-400">1/3</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(calculo.tercoFeriasIndenizado)}</td><td className="py-2 px-3"></td></tr>}
+                                
                                 {ajustes.filter(a => a.tipo === 'Provento').map((aj, i) => (
                                     <tr key={`p-${i}`} className="border-b border-slate-100"><td className="py-2 px-3">{aj.descricao}</td><td className="py-2 px-3 text-center text-slate-400">-</td><td className="py-2 px-3 text-right font-mono">{formatCurrency(aj.valor)}</td><td className="py-2 px-3"></td></tr>
                                 ))}
@@ -676,6 +680,10 @@ function App() {
 
                                     <LineItem label="Férias Proporcionais" value={calculo.valorFeriasProp} subtext={`${calculo.avosFerias}/12 avos`} type="plus" />
                                     <LineItem label="1/3 Férias Prop." value={calculo.tercoFeriasProp} type="plus" />
+                                    
+                                    <LineItem label="Férias s/ Aviso" value={calculo.valorFeriasIndenizado} type="plus" />
+                                    <LineItem label="1/3 Férias s/ Aviso" value={calculo.tercoFeriasIndenizado} type="plus" />
+                                    
                                     {ajustes.filter(a => a.tipo === 'Provento').map((aj, idx) => <LineItem key={`aj-p-${idx}`} label={aj.descricao} value={aj.valor} subtext="Ajuste Manual" type="plus" />)}
                                 </div>
                             </div>
