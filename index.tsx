@@ -503,9 +503,21 @@ function App() {
                         {/* Header Demonstrativo */}
                         <div className="flex justify-between items-end border-b-2 border-slate-800 pb-2 mb-4">
                             <div>
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="material-icons-round text-3xl text-emerald-600">account_balance_wallet</span>
-                                    <h1 className="text-xl font-black uppercase tracking-tight text-slate-900">Vírgula Contábil</h1>
+                                <div className="flex items-center space-x-4 mb-2">
+                                    <div className="w-12 h-12 bg-virgula-card rounded-xl border border-slate-200 flex items-center justify-center text-virgula-green shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calculator">
+                                            <rect width="16" height="20" x="4" y="2" rx="2"/>
+                                            <line x1="8" x2="16" y1="6" y2="6"/>
+                                            <line x1="16" x2="16" y1="14" y2="18"/>
+                                            <path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/>
+                                            <path d="M12 14h.01"/><path d="M8 14h.01"/>
+                                            <path d="M12 18h.01"/><path d="M8 18h.01"/>
+                                        </svg>
+                                    </div>
+                                    <div className="flex flex-col justify-center">
+                                        <span className="text-3xl font-bold text-slate-900 tracking-tight leading-none mb-0.5">Vírgula</span>
+                                        <span className="text-base font-semibold text-virgula-green tracking-widest leading-none uppercase">Contábil</span>
+                                    </div>
                                 </div>
                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Demonstrativo de Rescisão ({calculo.isPedidoDemissao ? 'Pedido de Demissão' : 'Dispensa sem Justa Causa'})</p>
                             </div>
