@@ -6,7 +6,12 @@ export default {
     "./**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'virgula-card': '#0f172a', // Equivalente ao slate-900 usado anteriormente
+        'virgula-green': '#10b981', // Equivalente ao emerald-500 usado anteriormente
+      }
+    },
   },
   plugins: [],
 }

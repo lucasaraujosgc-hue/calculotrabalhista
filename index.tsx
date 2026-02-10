@@ -67,14 +67,13 @@ const HISTORICO_SALARIO_MINIMO = [
   { date: '2000-06-01', value: 151.00 },
 ];
 
-
 const getSalarioMinimo = (date: Date): number => {
   for (const record of HISTORICO_SALARIO_MINIMO) {
     if (date >= new Date(record.date)) {
       return record.value;
     }
   }
-  return 151.00;
+  return 1412.00;
 };
 
 // Faixas conforme imagem fornecida
@@ -650,8 +649,8 @@ function App() {
     <div className="min-h-screen bg-[#020617] font-sans text-slate-300">
       <div className="max-w-6xl mx-auto p-4 md:p-8 no-print">
         <header className="mb-6">
-            <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }} className="flex items-center space-x-4 cursor-pointer group no-underline">
-                <div className="w-12 h-12 bg-slate-900 rounded-xl border border-white/10 flex items-center justify-center text-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-transform group-hover:scale-105">
+            <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }} className="flex items-center space-x-4 cursor-pointer group">
+                <div className="w-12 h-12 bg-virgula-card rounded-xl border border-white/10 flex items-center justify-center text-virgula-green shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-transform group-hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calculator">
                       <rect width="16" height="20" x="4" y="2" rx="2"/>
                       <line x1="8" x2="16" y1="6" y2="6"/>
@@ -667,7 +666,7 @@ function App() {
                 </div>
                 <div className="flex flex-col justify-center">
                     <span className="text-3xl font-bold text-white tracking-tight leading-none mb-0.5">Vírgula</span>
-                    <span className="text-base font-semibold text-emerald-500 tracking-widest leading-none uppercase">Contábil</span>
+                    <span className="text-base font-semibold text-virgula-green tracking-widest leading-none uppercase">Contábil</span>
                 </div>
             </a>
         </header>
