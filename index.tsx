@@ -43,7 +43,30 @@ const HISTORICO_SALARIO_MINIMO = [
   { date: '2022-01-01', value: 1212.00 },
   { date: '2021-01-01', value: 1100.00 },
   { date: '2020-02-01', value: 1045.00 },
+  { date: '2020-01-01', value: 1039.00 },
+  { date: '2019-01-01', value: 998.00 },
+  { date: '2018-01-01', value: 954.00 },
+  { date: '2017-01-01', value: 937.00 },
+  { date: '2016-01-01', value: 880.00 },
+  { date: '2015-01-01', value: 788.00 },
+  { date: '2014-01-01', value: 724.00 },
+  { date: '2013-01-01', value: 678.00 },
+  { date: '2012-01-01', value: 622.00 },
+  { date: '2011-03-01', value: 545.00 },
+  { date: '2011-01-01', value: 540.00 },
+  { date: '2010-01-01', value: 510.00 },
+  { date: '2009-02-01', value: 465.00 },
+  { date: '2008-03-01', value: 415.00 },
+  { date: '2007-04-01', value: 380.00 },
+  { date: '2006-04-01', value: 350.00 },
+  { date: '2005-05-01', value: 300.00 },
+  { date: '2004-05-01', value: 260.00 },
+  { date: '2003-06-01', value: 240.00 },
+  { date: '2002-06-01', value: 200.00 },
+  { date: '2001-06-01', value: 180.00 },
+  { date: '2000-06-01', value: 151.00 },
 ];
+
 
 const getSalarioMinimo = (date: Date): number => {
   for (const record of HISTORICO_SALARIO_MINIMO) {
@@ -51,7 +74,7 @@ const getSalarioMinimo = (date: Date): number => {
       return record.value;
     }
   }
-  return 1412.00;
+  return 151.00;
 };
 
 // Faixas conforme imagem fornecida
