@@ -43,30 +43,7 @@ const HISTORICO_SALARIO_MINIMO = [
   { date: '2022-01-01', value: 1212.00 },
   { date: '2021-01-01', value: 1100.00 },
   { date: '2020-02-01', value: 1045.00 },
-  { date: '2020-01-01', value: 1039.00 },
-  { date: '2019-01-01', value: 998.00 },
-  { date: '2018-01-01', value: 954.00 },
-  { date: '2017-01-01', value: 937.00 },
-  { date: '2016-01-01', value: 880.00 },
-  { date: '2015-01-01', value: 788.00 },
-  { date: '2014-01-01', value: 724.00 },
-  { date: '2013-01-01', value: 678.00 },
-  { date: '2012-01-01', value: 622.00 },
-  { date: '2011-03-01', value: 545.00 },
-  { date: '2011-01-01', value: 540.00 },
-  { date: '2010-01-01', value: 510.00 },
-  { date: '2009-02-01', value: 465.00 },
-  { date: '2008-03-01', value: 415.00 },
-  { date: '2007-04-01', value: 380.00 },
-  { date: '2006-04-01', value: 350.00 },
-  { date: '2005-05-01', value: 300.00 },
-  { date: '2004-05-01', value: 260.00 },
-  { date: '2003-06-01', value: 240.00 },
-  { date: '2002-06-01', value: 200.00 },
-  { date: '2001-06-01', value: 180.00 },
-  { date: '2000-06-01', value: 151.00 },
 ];
-
 
 const getSalarioMinimo = (date: Date): number => {
   for (const record of HISTORICO_SALARIO_MINIMO) {
@@ -74,7 +51,7 @@ const getSalarioMinimo = (date: Date): number => {
       return record.value;
     }
   }
-  return 151.00;
+  return 1412.00;
 };
 
 // Faixas conforme imagem fornecida
@@ -281,24 +258,55 @@ function App() {
 
     const isPedidoDemissao = formData.motivo === 'pedido';
 
-    let diasAviso = 30;
+    // 1. Cálculo do Aviso Prévio Total (Lei 12.506/2011)
+    // 30 dias base + 3 dias por ano completo, até o máximo de 90 dias (60 proporcionais)
+    let diasAvisoTotal = 30;
     if (!isPedidoDemissao) {
         const anosTrabalhados = Math.floor(diffDays(demissao, admissao) / 365.25);
-        diasAviso += Math.min(anosTrabalhados * 3, 60);
+        diasAvisoTotal += Math.min(anosTrabalhados * 3, 60);
     }
+
+    // 2. Definir quantos dias são INDENIZADOS e quantos TRABALHADOS
+    // Se indenizado: Todos os dias contam como indenizados.
+    // Se trabalhado: Os primeiros 30 são trabalhados, o restante (proporcional) é indenizado.
+    let diasAvisoIndenizados = 0;
     let valorAvisoProvento = 0;
     let valorAvisoDesconto = 0;
-    const projecaoAviso = new Date(demissao);
-    if (!isPedidoDemissao) projecaoAviso.setDate(demissao.getDate() + diasAviso);
+
     if (formData.avisoTipo === 'indenizado') {
-        if (isPedidoDemissao) valorAvisoDesconto = (salarioTotal / 30) * 30;
-        else valorAvisoProvento = (salarioTotal / 30) * diasAviso;
+        if (isPedidoDemissao) {
+            // No pedido de demissão, se não cumprir, desconta-se (em regra limitado a 30 dias)
+            valorAvisoDesconto = (salarioTotal / 30) * 30; 
+        } else {
+            // Dispensa sem justa causa com aviso indenizado: Paga-se tudo
+            diasAvisoIndenizados = diasAvisoTotal;
+            valorAvisoProvento = (salarioTotal / 30) * diasAvisoIndenizados;
+        }
     } else {
-        if (!isPedidoDemissao) {
-            const diasIndenizados = diasAviso - 30;
-            if (diasIndenizados > 0) valorAvisoProvento = (salarioTotal / 30) * diasIndenizados;
+        // Aviso Trabalhado
+        if (isPedidoDemissao) {
+            // Cumpriu o aviso, recebe saldo de salário normal. Sem indenização extra.
+        } else {
+            // Dispensa sem justa causa com aviso trabalhado
+            // Trabalha 30 dias (já estará no saldo de salário através da data de demissão)
+            // O excedente (proporcional) é indenizado
+            const diasProporcionais = diasAvisoTotal - 30;
+            if (diasProporcionais > 0) {
+                diasAvisoIndenizados = diasProporcionais;
+                valorAvisoProvento = (salarioTotal / 30) * diasAvisoIndenizados;
+            }
         }
     }
+
+    // 3. Definir Data de Projeção para Reflexos
+    // A projeção soma SOMENTE os dias indenizados à data de desligamento.
+    // Se aviso trabalhado: demissao já inclui os 30 dias. Soma-se apenas o proporcional indenizado.
+    // Se aviso indenizado: demissao é o último dia trabalhado. Soma-se o aviso total indenizado.
+    const projecaoAviso = new Date(demissao);
+    if (!isPedidoDemissao) {
+        projecaoAviso.setDate(demissao.getDate() + diasAvisoIndenizados);
+    }
+
     let diasTrabalhados = demissao.getDate();
     if (diasTrabalhados === 31) diasTrabalhados = 30; 
     const saldoSalario = (salarioTotal / 30) * diasTrabalhados;
@@ -327,6 +335,7 @@ function App() {
         return meses;
     };
     
+    // 13º Salário Normal (até data demissão)
     const avos13 = calcularAvos13(admissao, demissao);
     const valor13 = (salarioTotal / 12) * avos13;
     
@@ -336,6 +345,7 @@ function App() {
     const valorFeriasDobro = feriasDobroQtd * salarioTotal;
     const tercoFeriasDobro = valorFeriasDobro / 3;
 
+    // Férias Proporcionais Normais (até data demissão)
     let inicioPeriodoAquisitivo = new Date(admissao);
     while (new Date(inicioPeriodoAquisitivo.getFullYear() + 1, inicioPeriodoAquisitivo.getMonth(), inicioPeriodoAquisitivo.getDate()) <= demissao) {
         inicioPeriodoAquisitivo.setFullYear(inicioPeriodoAquisitivo.getFullYear() + 1);
@@ -353,15 +363,23 @@ function App() {
     const valorFeriasProp = (salarioTotal / 12) * avosFeriasCalc;
     const tercoFeriasProp = valorFeriasProp / 3;
 
+    // Reflexos sobre Aviso Indenizado (13º e Férias)
+    // Calcula-se a diferença de avos entre (admissão -> demissão) e (admissão -> projeção)
     let valor13Indenizado = 0;
     let valorFeriasIndenizado = 0;
     let tercoFeriasIndenizado = 0;
-    if (!isPedidoDemissao && formData.avisoTipo === 'indenizado') {
+    
+    // A condição agora verifica se EXISTEM dias indenizados, independente de ser 'trabalhado' ou 'indenizado'
+    if (!isPedidoDemissao && diasAvisoIndenizados > 0) {
+        // Reflexo 13º
         const avos13ComProjecao = calcularAvos13(admissao, projecaoAviso);
         const diffAvos13 = Math.max(0, avos13ComProjecao - avos13);
         if (diffAvos13 > 0) valor13Indenizado = (salarioTotal / 12) * diffAvos13;
+        
+        // Reflexo Férias
         let avosFeriasProj = 0;
         let cursorProj = new Date(inicioPeriodoAquisitivo);
+        // Calcula avos totais até a projeção
         while (cursorProj < projecaoAviso) {
             let fimMes = new Date(cursorProj);
             fimMes.setMonth(fimMes.getMonth() + 1);
@@ -370,6 +388,8 @@ function App() {
             cursorProj.setMonth(cursorProj.getMonth() + 1);
         }
         if (avosFeriasProj > 12) avosFeriasProj = 12;
+        
+        // A diferença é o que deve ser pago como indenizado
         const diffAvosFerias = Math.max(0, avosFeriasProj - avosFeriasCalc);
         if (diffAvosFerias > 0) {
              valorFeriasIndenizado = (salarioTotal / 12) * diffAvosFerias;
@@ -402,7 +422,8 @@ function App() {
     setCalculo({
         saldoSalario, diasTrabalhados,
         valorAviso: valorAvisoProvento, valorAvisoDesconto, 
-        diasAviso, valor13, avos13,
+        diasAviso: diasAvisoIndenizados, // Ajustado para exibir os dias efetivamente indenizados na tabela
+        valor13, avos13,
         valorFeriasVencidas, tercoFeriasVencidas, feriasVencidasQtd,
         valorFeriasDobro, tercoFeriasDobro, feriasDobroQtd,
         valorFeriasProp, tercoFeriasProp, avosFerias: avosFeriasCalc,
