@@ -195,6 +195,7 @@ function App() {
     dataDemissao: getTodayDateString(),
     avisoTipo: 'trabalhado',
     feriasVencidasQtd: 0,
+    zerarFGTS: false,
   });
 
   const [calculo, setCalculo] = useState<any>(null);
@@ -421,8 +422,9 @@ function App() {
 
     let saldoFGTSParaMulta = fgtsSaldoManual !== '' ? Number(fgtsSaldoManual) : fgtsManualData.reduce((acc, curr) => acc + curr.value, 0);
     const baseFGTSRescisao = saldoSalario + valor13 + (valorAvisoProvento > 0 ? valorAvisoProvento : 0);
-    const fgtsRescisao = baseFGTSRescisao * 0.08;
-    const fgtsAvisoIndenizado = valor13Indenizado * 0.08;
+    const fgtsRescisao = formData.zerarFGTS ? 0 : baseFGTSRescisao * 0.08;
+    const fgtsAvisoIndenizado = formData.zerarFGTS ? 0 : valor13Indenizado * 0.08;
+    if (formData.zerarFGTS) saldoFGTSParaMulta = 0;
     const baseTotalMulta = saldoFGTSParaMulta + fgtsRescisao + fgtsAvisoIndenizado;
     const multa40 = isPedidoDemissao ? 0 : baseTotalMulta * 0.4;
     const totalContaFGTS = isPedidoDemissao ? 0 : (baseTotalMulta + multa40);
@@ -701,6 +703,19 @@ function App() {
                 <FormInput label="Tipo de Aviso Prévio" name="avisoTipo" options={[{ value: 'trabalhado', label: 'Trabalhado' }, { value: 'indenizado', label: 'Indenizado' }]} value={formData.avisoTipo} onChange={handleInputChange} />
                 
                 <FormInput label="Férias Vencidas (Períodos)" name="feriasVencidasQtd" type="number" value={formData.feriasVencidasQtd} onChange={handleInputChange} />
+
+                <div className="mt-3 flex items-center gap-2">
+                    <input 
+                      type="checkbox" 
+                      id="zerarFGTS"
+                      checked={formData.zerarFGTS}
+                      onChange={(e) => setFormData(prev => ({ ...prev, zerarFGTS: e.target.checked }))}
+                      className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 border-slate-600 bg-slate-800"
+                    />
+                    <label htmlFor="zerarFGTS" className="text-xs font-bold text-slate-400 cursor-pointer">
+                        Não calcular FGTS da rescisão
+                    </label>
+                </div>
 
                 <div className="mt-4">
                     <button onClick={handleCalcular} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl shadow-lg shadow-emerald-900/20 transition-all flex justify-center items-center gap-2 text-[10px] uppercase tracking-widest transform active:scale-[0.98]"><span className="material-icons-round text-base">play_arrow</span> Calcular Rescisão</button>
