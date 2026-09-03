@@ -196,6 +196,7 @@ function App() {
     avisoTipo: 'trabalhado',
     feriasVencidasQtd: 0,
     zerarFGTS: false,
+    zerarMultaFGTS: false,
   });
 
   const [calculo, setCalculo] = useState<any>(null);
@@ -426,7 +427,7 @@ function App() {
     const fgtsAvisoIndenizado = formData.zerarFGTS ? 0 : valor13Indenizado * 0.08;
     if (formData.zerarFGTS) saldoFGTSParaMulta = 0;
     const baseTotalMulta = saldoFGTSParaMulta + fgtsRescisao + fgtsAvisoIndenizado;
-    const multa40 = isPedidoDemissao ? 0 : baseTotalMulta * 0.4;
+    const multa40 = (isPedidoDemissao || formData.zerarMultaFGTS) ? 0 : baseTotalMulta * 0.4;
     const totalContaFGTS = isPedidoDemissao ? 0 : (baseTotalMulta + multa40);
     const inssSalario = calcularINSS(saldoSalario);
     const inss13 = calcularINSS(valor13 + valor13Indenizado);
@@ -714,6 +715,19 @@ function App() {
                     />
                     <label htmlFor="zerarFGTS" className="text-xs font-bold text-slate-400 cursor-pointer">
                         Não calcular FGTS da rescisão
+                    </label>
+                </div>
+
+                <div className="mt-2 flex items-center gap-2">
+                    <input 
+                      type="checkbox" 
+                      id="zerarMultaFGTS"
+                      checked={formData.zerarMultaFGTS}
+                      onChange={(e) => setFormData(prev => ({ ...prev, zerarMultaFGTS: e.target.checked }))}
+                      className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 border-slate-600 bg-slate-800"
+                    />
+                    <label htmlFor="zerarMultaFGTS" className="text-xs font-bold text-slate-400 cursor-pointer">
+                        Não calcular multa de 40% do FGTS
                     </label>
                 </div>
 
